@@ -17,7 +17,7 @@ Quick network-based install:
 
 Alternative local install (e.g. after cloning git repo, etc.) in verbose mode:
 
-    cuckoo-installer -i -v
+    cuckoo-theme-installer -i -v
 
 
 License
