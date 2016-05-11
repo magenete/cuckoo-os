@@ -23,7 +23,7 @@
    inkscape:export-ydpi="90"><metadata
      id="metadata3010"><rdf:RDF><cc:Work
          rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
      id="defs3008"><linearGradient
        inkscape:collect="always"
        id="linearGradient19350"><stop
@@ -318,7 +318,7 @@
      id="namedview3006"
      showgrid="false"
      inkscape:zoom="1.4"
-     inkscape:cx="325.80424"
+     inkscape:cx="327.23281"
      inkscape:cy="237.85852"
      inkscape:window-x="0"
      inkscape:window-y="25"
@@ -330,7 +330,7 @@
      inkscape:groupmode="layer"
      inkscape:label="ink_ext_XXXXXX"
      transform="matrix(1.25,0,0,-1.25,0,480)"><rect
-       style="fill:#e9e9e9;fill-opacity:1;stroke:none"
+       style="fill:#b7b7b7;fill-opacity:1;stroke:none"
        id="rect3036"
        width="512"
        height="384"
