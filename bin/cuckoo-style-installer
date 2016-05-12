@@ -1,0 +1,472 @@
+#!/bin/sh
+#
+# A desktop-oriented virtual machines management system written in Shell.
+#
+# Code is available online at https://github.com/magenete/cuckoo
+# See LICENSE for licensing information, and README for details.
+#
+# Copyright (C) 2016 Magenete Systems OÜ.
+#
+
+
+CUCKOO_OS_ACTION=""
+CUCKOO_OS_STYLE_LIST="light gray dark"
+CUCKOO_OS_STYLE=""
+CUCKOO_OS_STYLE_MODE=""
+CUCKOO_OS_DIR="$(cd "$(dirname "$0")/.." && pwd -P)/"
+CUCKOO_OS_ETC_DIR="${CUCKOO_OS_DIR}etc/"
+CUCKOO_OS_ETC_BACKGROUND_DIR="${CUCKOO_OS_ETC_DIR}background/"
+CUCKOO_OS_ETC_LIGHTDM_DIR="${CUCKOO_OS_ETC_DIR}lightdm/"
+CUCKOO_OS_ETC_XFCE_DIR="${CUCKOO_OS_ETC_DIR}xfce/"
+CUCKOO_OS_ETC_XFCE_THEME_DIR="${CUCKOO_OS_ETC_XFCE_DIR}theme/"
+CUCKOO_OS_ETC_XFCE_ICON_DIR="${CUCKOO_OS_ETC_XFCE_DIR}icon/"
+CUCKOO_OS_ETC_VERSION_FILE="${CUCKOO_OS_ETC_DIR}VERSION"
+CUCKOO_VERBOSE=""
+
+CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR="/etc/lightdm/"
+CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE="${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}lightdm-gtk-greeter.conf"
+CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT="${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE}.default"
+
+CUCKOO_OS_SYSTEM_IMAGES_DIR="/usr/share/images/desktop-base/"
+CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR="${CUCKOO_OS_SYSTEM_IMAGES_DIR}cuckoo/"
+
+CUCKOO_OS_SYSTEM_THEMES_DIR="/usr/share/themes/"
+CUCKOO_OS_SYSTEM_ICONS_DIR="/usr/share/icons/"
+
+CUCKOO_OS_SYSTEM_GRUB_CONFIG_FILE="/boot/grub/grub.cfg"
+CUCKOO_OS_SYSTEM_GRUB_COLOR_NORMAL="white/black"
+CUCKOO_OS_SYSTEM_GRUB_COLOR_HIGHLIGHT="black/white"
+
+
+# Help message
+cuckoo_os_help()
+{
+    cat << _H_E_L_P
+
+Usage: $(basename $0) [action] [style] [mode]
+
+Cuckoo style install/uninstall script.
+
+  Action:
+
+    i, install    Install Cuckoo (by default).
+    u, uninstall  Uninstall Cuckoo.
+    s, select     Select mode.
+
+  Style:
+
+    l, light
+    g, gray
+    d, dark
+
+  Mode:
+
+    s, system
+    u, user
+    a, all
+
+  Info:
+
+  v, verbose    Print log messages.
+
+     version    Print the current version.
+  h, help       Show this message.
+
+_H_E_L_P
+}
+
+
+# Print help, error message and exit
+cuckoo_os_error()
+{
+    cuckoo_os_help
+
+    echo ""
+    echo "ERROR: ${1}"
+    echo ""
+
+    exit 1
+}
+
+
+# Print message
+cuckoo_os_message()
+{
+    echo ""
+    echo "$1"
+    echo ""
+}
+
+
+#
+cucko_os_style_theme_define()
+{
+    case "$1" in
+        light )
+            echo "adwaita-grey"
+        ;;
+        gray )
+            echo "adwaita-graphene"
+        ;;
+        dark )
+            echo "xfce-dusk-green"
+        ;;
+        * )
+            cuckoo_os_error "Invalid style '${1}'"
+        ;;
+    esac
+}
+
+
+#
+cuckoo_os_linux_uninstall_system()
+{
+    if [ -e "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" ] && [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" ]
+    then
+        mv -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
+    fi
+
+    grub-mkconfig -o "$CUCKOO_OS_SYSTEM_GRUB_CONFIG_FILE"
+}
+
+
+#
+cuckoo_os_linux_uninstall_user()
+{
+    echo "Style mode USER uninstall"
+}
+
+
+#
+cuckoo_os_linux_uninstall_all()
+{
+    cuckoo_os_linux_uninstall_system
+    cuckoo_os_linux_uninstall_user
+}
+
+
+#
+cuckoo_os_linux_uninstall()
+{
+    rm -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}cuckoo"*
+
+    rm -rf "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR"
+
+    rm -rf "${CUCKOO_OS_SYSTEM_THEMES_DIR}cuckoo"*
+
+    rm -rf "${CUCKOO_OS_SYSTEM_ICONS_DIR}cuckoo"*
+}
+
+
+#
+cuckoo_os_linux_select_system()
+{
+    cuckoo_os_linux_install_system
+}
+
+
+#
+cuckoo_os_linux_select_user()
+{
+    echo "Style mode USER select"
+}
+
+
+#
+cuckoo_os_linux_select_all()
+{
+    cuckoo_os_linux_select_system
+    cuckoo_os_linux_select_user
+}
+
+
+#
+cuckoo_os_linux_select()
+{
+    if [ ! -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cucko_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" ]
+    then
+        cucko_os_lightdm_gtk_greeter_files_create
+    fi
+}
+
+
+#
+cucko_os_lightdm_gtk_greeter_file_name()
+{
+    echo "cuckoo-lightdm-gtk-greeter-${1}.conf"
+}
+
+
+#
+cucko_os_lightdm_gtk_greeter_files_create()
+{
+    for style in $CUCKOO_OS_STYLE_LIST
+    do
+        cat > "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cucko_os_lightdm_gtk_greeter_file_name "$style")" << _L_I_G_H_T_D_M__G_T_K__G_R_E_E_T_E_R__C_O_N_F
+#
+# background = Background file to use, either an image path or a color (e.g. #772953)
+# theme-name = GTK+ theme to use
+# icon-theme-name = Icon theme to use
+# font-name = Font to use
+# xft-antialias = Whether to antialias Xft fonts (true or false)
+# xft-dpi = Resolution for Xft in dots per inch (e.g. 96)
+# xft-hintstyle = What degree of hinting to use (none, slight, medium, or hintfull)
+# xft-rgba = Type of subpixel antialiasing (none, rgb, bgr, vrgb or vbgr)
+# show-indicators = semi-colon ";" separated list of allowed indicator modules. Built-in indicators include "~a11y", "~language", "~session", "~power". Unity indicators can be represented by
+# show-clock (true or false)
+# clock-format = strftime-format string, e.g. %H:%M
+# keyboard = command to launch on-screen keyboard
+# position = main window position: x y
+# default-user-image = Image used as default user icon, path or #icon-name
+# screensaver-timeout = Timeout (in seconds) until the screen blanks when the greeter is called as lockscreen
+#
+
+
+[greeter]
+background=${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR}background/${style}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.svg
+theme-name=cuckoo-$(cucko_os_style_theme_define "${style}")
+icon-theme-name=cuckoo-adwaita
+font-name=Sans
+xft-antialias=true
+xft-dpi=96
+xft-hintstyle=hintfull
+xft-rgba=rgb
+show-indicators=~power
+show-clock=true
+clock-format=%H:%M:%S
+position=50%,center 20%,center
+_L_I_G_H_T_D_M__G_T_K__G_R_E_E_T_E_R__C_O_N_F
+    done
+}
+
+
+#
+cucko_os_lightdm_gtk_greeter_file_select()
+{
+    if [ -e "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" ] && [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" ]
+    then
+        if [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ] && [ ! -L "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ]
+        then
+            mv "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT}.backup"
+        fi
+    else
+        mv "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT"
+    fi
+
+    if [ ! -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cucko_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" ]
+    then
+        cucko_os_lightdm_gtk_greeter_files_create
+    fi
+}
+
+
+#
+cuckoo_os_linux_install()
+{
+    cucko_os_lightdm_gtk_greeter_files_create
+
+    cucko_os_lightdm_gtk_greeter_file_select
+
+    if [ -e "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR" ] && [ -d "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR" ]
+    then
+        cuckoo_os_message "WARNING: Directory '${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR}' already exists"
+    else
+        mkdir "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR"
+        if [ $? -gt 0 ]
+        then
+            cuckoo_os_error "Could not create directory '$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR'"
+        fi
+    fi
+
+    # Cuckoo OS backgrounds
+    cp -r "$CUCKOO_OS_ETC_BACKGROUND_DIR" "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR"
+    if [ $? -gt 0 ]
+    then
+        cuckoo_os_error "Could not copy from '$CUCKOO_OS_ETC_BACKGROUND_DIR' to '$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR'"
+    fi
+    chown -R root.root "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR"
+
+    # XFce themes
+    for xfce_theme in $(ls "$CUCKOO_OS_ETC_XFCE_THEME_DIR")
+    do
+        cp -r "${CUCKOO_OS_ETC_XFCE_THEME_DIR}${xfce_theme}" "${CUCKOO_OS_SYSTEM_THEMES_DIR}cuckoo-${xfce_theme}"
+        if [ $? -gt 0 ]
+        then
+            cuckoo_os_error "Could not copy theme '${CUCKOO_OS_ETC_XFCE_THEME_DIR}${xfce_theme}'"
+        fi
+    done
+
+    # Xfce icons
+    for xfce_icon in $(ls "$CUCKOO_OS_ETC_XFCE_ICON_DIR")
+    do
+        cp -r "${CUCKOO_OS_ETC_XFCE_ICON_DIR}${xfce_icon}" "${CUCKOO_OS_SYSTEM_ICONS_DIR}cuckoo-${xfce_icon}"
+        if [ $? -gt 0 ]
+        then
+            cuckoo_os_error "Could not copy theme '${CUCKOO_OS_ETC_XFCE_ICON_DIR}${xfce_icon}'"
+        fi
+    done
+}
+
+
+#
+cuckoo_os_linux_install_system()
+{
+    # LightDM
+    ln -sf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cucko_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
+
+    # GRUB
+    export GRUB_BACKGROUND="${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR}background/${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}-grub.png"
+    export GRUB_COLOR_NORMAL="$CUCKOO_OS_SYSTEM_GRUB_COLOR_NORMAL"
+    export GRUB_COLOR_HIGHLIGHT="$CUCKOO_OS_SYSTEM_GRUB_COLOR_HIGHLIGHT"
+
+    grub-mkconfig -o "$CUCKOO_OS_SYSTEM_GRUB_CONFIG_FILE"
+}
+
+
+#
+cuckoo_os_linux_install_user()
+{
+    echo "Style mode USER install"
+}
+
+
+#
+cuckoo_os_linux_install_all()
+{
+    cuckoo_os_linux_install_system
+    cuckoo_os_linux_install_user
+}
+
+
+# Action options parsing
+cuckoo_os_args_action()
+{
+    case $1 in
+        install | i )
+            CUCKOO_OS_ACTION="install"
+        ;;
+        uninstall | u )
+            CUCKOO_OS_ACTION="uninstall"
+        ;;
+        select | s )
+            CUCKOO_OS_ACTION="select"
+        ;;
+        version )
+            echo "Cuckoo OS version: $(cat "$CUCKOO_OS_ETC_VERSION_FILE")"
+            exit 0
+        ;;
+        help | h )
+            cuckoo_os_help
+            exit 0
+        ;;
+        * )
+            cuckoo_os_error "Invalid action option '${1}'"
+        ;;
+    esac
+}
+
+
+# Style options parsing
+cuckoo_os_args_style()
+{
+    case $1 in
+        light | l )
+            CUCKOO_OS_STYLE="light"
+        ;;
+        gray | g | "" )
+            CUCKOO_OS_STYLE="gray"
+        ;;
+        dark | d )
+            CUCKOO_OS_STYLE="dark"
+        ;;
+        * )
+            cuckoo_os_error "Invalid style option '${1}'"
+        ;;
+    esac
+}
+
+
+# Style options parsing
+cuckoo_os_args_style_mode()
+{
+    case $1 in
+        system | s | "" )
+            CUCKOO_OS_STYLE_MODE="system"
+        ;;
+        user | u )
+            CUCKOO_OS_STYLE_MODE="user"
+        ;;
+        all | a )
+            CUCKOO_OS_STYLE_MODE="all"
+        ;;
+        * )
+            cuckoo_os_error "Invalid mode option '${1}'"
+        ;;
+    esac
+}
+
+
+# Only for Linux
+cuckoo_os_linux_dist_define()
+{
+    . /etc/os-release
+
+    case "$ID" in
+        debian )
+            CUCKOO_OS_NAME_DIST="/debian"
+        ;;
+        arch )
+            CUCKOO_OS_NAME_DIST="/arch"
+        ;;
+        * )
+            cuckoo_os_message "WARNING: Current GNU/Linux '${ID}' were not supported"
+            CUCKOO_OS_NAME_DIST=""
+        ;;
+    esac
+}
+
+
+# Define OS name
+cuckoo_os_name_define()
+{
+    case $(uname -s) in
+        Linux )
+            CUCKOO_OS_NAME="linux"
+            cuckoo_os_linux_dist_define
+        ;;
+        Darwin )
+            CUCKOO_OS_NAME="macosx"
+        ;;
+        NetBSD )
+            CUCKOO_OS_NAME="netbsd"
+        ;;
+        OpenBSD )
+            CUCKOO_OS_NAME="openbsd"
+        ;;
+        FreeBSD )
+            CUCKOO_OS_NAME="freebsd"
+        ;;
+        DragonflyBSD )
+            CUCKOO_OS_NAME="dragonflybsd"
+        ;;
+        * )
+            cuckoo_os_error "Current OS does not supported for Cuckoo"
+        ;;
+    esac
+}
+
+
+# Launch
+if [ "$(whoami)" = "$USER" ] && [ "$(basename $HOME)" = "$USER" ]
+then
+    cuckoo_os_name_define
+
+    cuckoo_os_args_action "$1"
+    cuckoo_os_args_style "$2"
+    cuckoo_os_args_style_mode "$3"
+
+    cuckoo_os_${CUCKOO_OS_NAME}_${CUCKOO_OS_ACTION}
+    cuckoo_os_${CUCKOO_OS_NAME}_${CUCKOO_OS_ACTION}_${CUCKOO_OS_STYLE_MODE}
+else
+    cuckoo_error "Invalid ENV of current user '$USER'"
+fi
