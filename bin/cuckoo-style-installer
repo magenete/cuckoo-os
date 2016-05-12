@@ -14,6 +14,7 @@ CUCKOO_OS_STYLE_LIST="light gray dark"
 CUCKOO_OS_STYLE=""
 CUCKOO_OS_STYLE_MODE=""
 CUCKOO_OS_DIR="$(cd "$(dirname "$0")/.." && pwd -P)/"
+CUCKOO_OS_BIN_DIR="${CUCKOO_OS_DIR}bin/"
 CUCKOO_OS_ETC_DIR="${CUCKOO_OS_DIR}etc/"
 CUCKOO_OS_ETC_BACKGROUND_DIR="${CUCKOO_OS_ETC_DIR}background/"
 CUCKOO_OS_ETC_LIGHTDM_DIR="${CUCKOO_OS_ETC_DIR}lightdm/"
@@ -26,6 +27,11 @@ CUCKOO_VERBOSE=""
 CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR="/etc/lightdm/"
 CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE="${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}lightdm-gtk-greeter.conf"
 CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT="${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE}.default"
+CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT_BACKUP="${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT}.backup"
+CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_DIR="/usr/share/lightdm/"
+CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR="${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_DIR}cuckoo/"
+CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CONF_DIR="${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_DIR}lightdm.conf.d/"
+CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_FILE="${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CONF_DIR}cuckoo-lightdm.conf"
 
 CUCKOO_OS_SYSTEM_IMAGES_DIR="/usr/share/images/desktop-base/"
 CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR="${CUCKOO_OS_SYSTEM_IMAGES_DIR}cuckoo/"
@@ -126,6 +132,16 @@ cuckoo_os_linux_uninstall_system()
         mv -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
     fi
 
+    if [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT_BACKUP" ]
+    then
+        if [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ]
+        then
+            rm -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT_BACKUP"
+        else
+            mv "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT_BACKUP" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
+        fi
+    fi
+
     grub-mkconfig -o "$CUCKOO_OS_SYSTEM_GRUB_CONFIG_FILE"
 }
 
@@ -149,12 +165,14 @@ cuckoo_os_linux_uninstall_all()
 cuckoo_os_linux_uninstall()
 {
     rm -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}cuckoo"*
+    [ -L "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ] && rm -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
 
     rm -rf "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR"
-
     rm -rf "${CUCKOO_OS_SYSTEM_THEMES_DIR}cuckoo"*
-
     rm -rf "${CUCKOO_OS_SYSTEM_ICONS_DIR}cuckoo"*
+
+    rm -rf "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR"
+    rm -f "${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CONF_DIR}cuckoo"*
 }
 
 
@@ -187,6 +205,74 @@ cuckoo_os_linux_select()
     then
         cucko_os_lightdm_gtk_greeter_files_create
     fi
+}
+
+
+#
+cucko_os_lightdm_conf_dir_create()
+{
+    if [ ! -d "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR" ]
+    then
+        mkdir "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR"
+    fi
+
+    cp "${CUCKOO_OS_BIN_DIR}setup-hd-screen.sh" "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR"
+    chmod 0755 "${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR}setup-hd-screen.sh"
+}
+
+
+#
+cucko_os_lightdm_conf_file_create()
+{
+        cat > "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_FILE" << _L_I_G_H_T_D_M__C_O_N_F
+# Seat defaults
+#
+# type = Seat type (xlocal, xremote)
+# xdg-seat = Seat name to set pam_systemd XDG_SEAT variable and name to pass to X server
+# pam-service = PAM service to use for login
+# pam-autologin-service = PAM service to use for autologin
+# pam-greeter-service = PAM service to use for greeters
+# xserver-command = X server command to run (can also contain arguments e.g. X -special-option)
+# xserver-layout = Layout to pass to X server
+# xserver-config = Config file to pass to X server
+# xserver-allow-tcp = True if TCP/IP connections are allowed to this X server
+# xserver-share = True if the X server is shared for both greeter and session
+# xserver-hostname = Hostname of X server (only for type=xremote)
+# xserver-display-number = Display number of X server (only for type=xremote)
+# xdmcp-manager = XDMCP manager to connect to (implies xserver-allow-tcp=true)
+# xdmcp-port = XDMCP UDP/IP port to communicate on
+# xdmcp-key = Authentication key to use for XDM-AUTHENTICATION-1 (stored in keys.conf)
+# unity-compositor-command = Unity compositor command to run (can also contain arguments e.g. unity-system-compositor -special-option)
+# unity-compositor-timeout = Number of seconds to wait for compositor to start
+# greeter-session = Session to load for greeter
+# greeter-hide-users = True to hide the user list
+# greeter-allow-guest = True if the greeter should show a guest login option
+# greeter-show-manual-login = True if the greeter should offer a manual login option
+# greeter-show-remote-login = True if the greeter should offer a remote login option
+# user-session = Session to load for users
+# allow-user-switching = True if allowed to switch users
+# allow-guest = True if guest login is allowed
+# guest-session = Session to load for guests (overrides user-session)
+# session-wrapper = Wrapper script to run session with
+# greeter-wrapper = Wrapper script to run greeter with
+# guest-wrapper = Wrapper script to run guest sessions with
+# display-setup-script = Script to run when starting a greeter session (runs as root)
+# display-stopped-script = Script to run after stopping the display server (runs as root)
+# greeter-setup-script = Script to run when starting a greeter (runs as root)
+# session-setup-script = Script to run when starting a user session (runs as root)
+# session-cleanup-script = Script to run when quitting a user session (runs as root)
+# autologin-guest = True to log in as guest by default
+# autologin-user = User to log in with by default (overrides autologin-guest)
+# autologin-user-timeout = Number of seconds to wait before loading default user
+# autologin-session = Session to load for automatic login (overrides user-session)
+# autologin-in-background = True if autologin session should not be immediately activated
+# exit-on-failure = True if the daemon should exit if this seat fails
+#
+
+
+[SeatDefaults]
+greeter-setup-script=${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR}setup-hd-screen.sh
+_L_I_G_H_T_D_M__C_O_N_F
 }
 
 
@@ -243,14 +329,17 @@ _L_I_G_H_T_D_M__G_T_K__G_R_E_E_T_E_R__C_O_N_F
 #
 cucko_os_lightdm_gtk_greeter_file_select()
 {
-    if [ -e "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" ] && [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" ]
+    if [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ] && [ ! -L "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ]
     then
-        if [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ] && [ ! -L "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ]
+        if [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" ]
         then
-            mv "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT}.backup"
+            if [ ! -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT_BACKUP" ]
+            then
+                mv "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT_BACKUP"
+            fi
+        else
+            mv "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT"
         fi
-    else
-        mv "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT"
     fi
 
     if [ ! -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cucko_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" ]
@@ -263,10 +352,6 @@ cucko_os_lightdm_gtk_greeter_file_select()
 #
 cuckoo_os_linux_install()
 {
-    cucko_os_lightdm_gtk_greeter_files_create
-
-    cucko_os_lightdm_gtk_greeter_file_select
-
     if [ -e "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR" ] && [ -d "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR" ]
     then
         cuckoo_os_message "WARNING: Directory '${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR}' already exists"
@@ -305,6 +390,13 @@ cuckoo_os_linux_install()
             cuckoo_os_error "Could not copy theme '${CUCKOO_OS_ETC_XFCE_ICON_DIR}${xfce_icon}'"
         fi
     done
+
+    cucko_os_lightdm_gtk_greeter_files_create
+
+    cucko_os_lightdm_gtk_greeter_file_select
+
+    cucko_os_lightdm_conf_dir_create
+    cucko_os_lightdm_conf_file_create
 }
 
 
