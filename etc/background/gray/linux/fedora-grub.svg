@@ -23,7 +23,7 @@
    inkscape:export-ydpi="90"><metadata
      id="metadata3010"><rdf:RDF><cc:Work
          rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
      id="defs3008"><linearGradient
        inkscape:collect="always"
        id="linearGradient4140"><stop
@@ -513,7 +513,7 @@
      id="namedview3006"
      showgrid="false"
      inkscape:zoom="1.4"
-     inkscape:cx="332.98422"
+     inkscape:cx="317.67309"
      inkscape:cy="237.27097"
      inkscape:window-x="0"
      inkscape:window-y="25"
@@ -530,7 +530,7 @@
        x="0"
        y="-384"
        transform="scale(1,-1)" /><g
-       transform="matrix(0.59259257,0,0,0.59259257,192,498.89761)"
+       transform="matrix(0.44444443,0,0,0.44444443,208,422.17322)"
        id="g3859"><path
          transform="matrix(1.0877698,0,0,-1.008,253.29496,-858.26973)"
          d="m -34.285713,-337.67856 c 0,59.17337 -44.451728,107.14286 -99.285717,107.14286 -54.83398,0 -99.28571,-47.96949 -99.28571,-107.14286 0,-59.17337 44.45173,-107.14286 99.28571,-107.14286 54.833989,0 99.285717,47.96949 99.285717,107.14286 z"
