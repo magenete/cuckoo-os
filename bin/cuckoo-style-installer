@@ -17,6 +17,7 @@ CUCKOO_OS_DIR="$(cd "$(dirname "$0")/.." && pwd -P)/"
 CUCKOO_OS_BIN_DIR="${CUCKOO_OS_DIR}bin/"
 CUCKOO_OS_ETC_DIR="${CUCKOO_OS_DIR}etc/"
 CUCKOO_OS_ETC_BACKGROUND_DIR="${CUCKOO_OS_ETC_DIR}background/"
+CUCKOO_OS_ETC_GRUB_DIR="${CUCKOO_OS_ETC_DIR}grub/"
 CUCKOO_OS_ETC_LIGHTDM_DIR="${CUCKOO_OS_ETC_DIR}lightdm/"
 CUCKOO_OS_ETC_XFCE_DIR="${CUCKOO_OS_ETC_DIR}xfce/"
 CUCKOO_OS_ETC_XFCE_THEME_DIR="${CUCKOO_OS_ETC_XFCE_DIR}theme/"
@@ -40,7 +41,7 @@ CUCKOO_OS_SYSTEM_THEMES_DIR="/usr/share/themes/"
 CUCKOO_OS_SYSTEM_ICONS_DIR="/usr/share/icons/"
 
 CUCKOO_OS_SYSTEM_GRUB_CONFIG_FILE="/boot/grub/grub.cfg"
-CUCKOO_OS_SYSTEM_GRUB_THEME_DIR="/boot/grub/themes/"  # /boot/grub/themes/<name>/theme.txt"
+CUCKOO_OS_SYSTEM_GRUB_THEME_DIR="/boot/grub/themes/"  #"
 
 
 # Help message
@@ -172,6 +173,12 @@ cuckoo_os_linux_uninstall()
 
     rm -rf "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR"
     rm -f "${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CONF_DIR}cuckoo"*
+
+    if [ -d "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR" ]
+    then
+        rm -rf "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo"*
+        [ "$(ls "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR")" = "" ] && rm -rf "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR"
+    fi
 }
 
 
@@ -204,6 +211,24 @@ cuckoo_os_linux_select()
     then
         cucko_os_lightdm_gtk_greeter_files_create
     fi
+}
+
+
+cucko_os_grub_theme_dir_create()
+{
+    if [ ! -d "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR" ]
+    then
+        mkdir "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR"
+    fi
+
+    for grub_theme in $(ls "$CUCKOO_OS_ETC_GRUB_DIR")
+    do
+        cp -r "${CUCKOO_OS_ETC_GRUB_DIR}${grub_theme}" "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo-${grub_theme}"
+
+        cp -r "${CUCKOO_OS_ETC_BACKGROUND_DIR}${grub_theme}/" "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo-${grub_theme}/background/"
+        rm -f "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo-${grub_theme}/background/"*.svg
+        rm -f "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo-${grub_theme}/background/linux/"*.svg
+    done
 }
 
 
@@ -390,6 +415,8 @@ cuckoo_os_linux_install()
         fi
     done
 
+    cucko_os_grub_theme_dir_create
+
     cucko_os_lightdm_gtk_greeter_files_create
 
     cucko_os_lightdm_gtk_greeter_file_select
@@ -402,15 +429,19 @@ cuckoo_os_linux_install()
 #
 cuckoo_os_linux_install_system()
 {
-    # LightDM
-    ln -sf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cucko_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
+    if [ "$CUCKOO_OS_STYLE" != "" ]
+    then
+        # LightDM
+        ln -sf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cucko_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
 
-    # GRUB
-    export GRUB_BACKGROUND="${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR}background/${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}-grub.png"
-    export GRUB_GFXMODE="1024x768x24"
-    export GRUB_GFXPAYLOAD_LINUX="keep"
+        # GRUB
+        export GRUB_BACKGROUND="${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo-${CUCKOO_OS_STYLE}/background/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}-grub.png"
+        export GRUB_THEME="${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo-${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}-theme.txt"
+        export GRUB_GFXMODE="1024x768x24"
+        export GRUB_GFXPAYLOAD_LINUX="keep"
 
-    grub-mkconfig -o "$CUCKOO_OS_SYSTEM_GRUB_CONFIG_FILE"
+        grub-mkconfig -o "$CUCKOO_OS_SYSTEM_GRUB_CONFIG_FILE"
+    fi
 }
 
 
