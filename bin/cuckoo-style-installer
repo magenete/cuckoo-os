@@ -257,12 +257,12 @@ cucko_os_grub_theme_files_create()
 
 
 # Global Property
-title-text: "GRUB 2"
+title-text: "GNU/GRUB 2"
 title-font: "FreeSans Regular 24"
 title-color: "${CUCKOO_OS_STYLE_FONT_COLOR}"
 
 message-font: "Fixed Regular 10"
-message-color: "${CUCKOO_OS_STYLE_FONT_COLOR}"
+message-color: "${CUCKOO_OS_NAME_DIST_COLOR}"
 message-bg-color: "${CUCKOO_OS_STYLE_BACKGROUND_COLOR}"
 
 desktop-color: "${CUCKOO_OS_STYLE_BACKGROUND_COLOR}"
@@ -640,42 +640,42 @@ cuckoo_os_args_style()
     case "$1" in
         light | l )
             CUCKOO_OS_STYLE="light"
-            CUCKOO_OS_STYLE_FONT_COLOR="#484848"
+            CUCKOO_OS_STYLE_FONT_COLOR="#565656"
             CUCKOO_OS_STYLE_BACKGROUND_COLOR="#dbdbdb"
             case "${CUCKOO_OS_NAME_DIST#/}" in
                 alt )
                     CUCKOO_OS_NAME_DIST_COLOR="#fdd005"
-                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#fdd937"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#feec9b"
                 ;;
                 arch )
                     CUCKOO_OS_NAME_DIST_COLOR="#1793d1"
-                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#45a9da"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#a2d4ed"
                 ;;
                 debian )
                     CUCKOO_OS_NAME_DIST_COLOR="#a80030"
-                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#b93359"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#dc99ac"
                 ;;
                 fedora )
                     CUCKOO_OS_NAME_DIST_COLOR="#0a57a4"
-                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#3b79b6"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#9dbcdb"
                 ;;
                 opensuse )
                     CUCKOO_OS_NAME_DIST_COLOR="#73ba25"
-                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#8fc851"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#c7e3a8"
                 ;;
                 ubuntu )
                     CUCKOO_OS_NAME_DIST_COLOR="#0044aa"
-                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#3369bb"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#99b4dd"
                 ;;
                 * )
                     CUCKOO_OS_NAME_DIST_COLOR="#ffc42b"
-                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#ffd055"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#ffe7aa"
                 ;;
             esac
         ;;
         gray | g | "" )
             CUCKOO_OS_STYLE="gray"
-            CUCKOO_OS_STYLE_FONT_COLOR="#dbdbdb"
+            CUCKOO_OS_STYLE_FONT_COLOR="#bfbfbf"
             CUCKOO_OS_STYLE_BACKGROUND_COLOR="#484848"
             case "${CUCKOO_OS_NAME_DIST#/}" in
                 alt )
@@ -711,7 +711,7 @@ cuckoo_os_args_style()
         ;;
         dark | d )
             CUCKOO_OS_STYLE="dark"
-            CUCKOO_OS_STYLE_FONT_COLOR="#bfbfbf"
+            CUCKOO_OS_STYLE_FONT_COLOR="#565656"
             CUCKOO_OS_STYLE_BACKGROUND_COLOR="#161616"
             case "${CUCKOO_OS_NAME_DIST#/}" in
                 alt )
