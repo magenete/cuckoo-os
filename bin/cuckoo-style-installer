@@ -12,6 +12,8 @@
 CUCKOO_OS_ACTION=""
 CUCKOO_OS_STYLE_LIST="light gray dark"
 CUCKOO_OS_STYLE=""
+CUCKOO_OS_STYLE_FONT_COLOR=""
+CUCKOO_OS_STYLE_BACKGROUND_COLOR=""
 CUCKOO_OS_STYLE_MODE=""
 CUCKOO_OS_DIR="$(cd "$(dirname "$0")/.." && pwd -P)/"
 CUCKOO_OS_BIN_DIR="${CUCKOO_OS_DIR}bin/"
@@ -235,7 +237,7 @@ cucko_os_grub_theme_files_create()
     do
         for dist_name in $(ls "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/background/${style}/linux/"*.png) ""
         do
-            dist_name="$(basename "$dist_name" .png)"
+            [ ! -z "$dist_name" ] && dist_name="/$(basename "$dist_name" .png)"
 
             cat > "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/$(cucko_os_grub_theme_file_name_define "$style" "$dist_name")" << _G_R_U_B__T_H_E_M_E__F_I_L_E
 #
@@ -251,14 +253,14 @@ cucko_os_grub_theme_files_create()
 # Global Property
 title-text: "GRUB 2"
 title-font: "FreeSans Regular 24"
-title-color: "#c8c8c8"
+title-color: "$CUCKOO_OS_STYLE_FONT_COLOR"
 
 message-font: "Fixed Regular 10"
 #message-color: "#FFFFFF"
 #message-bg-color: "#FFF000"
 
-desktop-color: "#242424"
-desktop-image: "background/${style}/${CUCKOO_OS_NAME}.png"
+desktop-color: "$CUCKOO_OS_STYLE_BACKGROUND_COLOR"
+desktop-image: "background/${style}/${CUCKOO_OS_NAME}${dist_name}.png"
 
 #terminal-box: "menu_item_*.png"
 terminal-font: "Fixed Regular 10"
@@ -319,7 +321,7 @@ terminal-font: "Fixed Regular 10"
     + label {
         text = "Boot selection  "
         font = "FreeSans Regular 15"
-        color = "#c8c8c8"
+        color = "$CUCKOO_OS_STYLE_FONT_COLOR"
         align = "left"
     }
 
@@ -332,7 +334,7 @@ terminal-font: "Fixed Regular 10"
     + label {
         text = "Edit selection  "
         font = "FreeSans Regular 15"
-        color = "#c8c8c8"
+        color = "$CUCKOO_OS_STYLE_FONT_COLOR"
         align = "left"
     }
 
@@ -345,7 +347,7 @@ terminal-font: "Fixed Regular 10"
     + label {
         text = "GRUB commandline"
         font = "FreeSans Regular 15"
-        color = "#c8c8c8"
+        color = "$CUCKOO_OS_STYLE_FONT_COLOR"
         align = "left"
     }
 }
@@ -630,12 +632,18 @@ cuckoo_os_args_style()
     case $1 in
         light | l )
             CUCKOO_OS_STYLE="light"
+            CUCKOO_OS_STYLE_FONT_COLOR="#484848"
+            CUCKOO_OS_STYLE_BACKGROUND_COLOR="#b7b7b7"
         ;;
         gray | g | "" )
             CUCKOO_OS_STYLE="gray"
+            CUCKOO_OS_STYLE_FONT_COLOR="#b7b7b7"
+            CUCKOO_OS_STYLE_BACKGROUND_COLOR="#484848"
         ;;
         dark | d )
             CUCKOO_OS_STYLE="dark"
+            CUCKOO_OS_STYLE_FONT_COLOR="#c8c8c8"
+            CUCKOO_OS_STYLE_BACKGROUND_COLOR="#242424"
         ;;
         * )
             cuckoo_os_error "Invalid style option '${1}'"
