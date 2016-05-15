@@ -15,6 +15,8 @@ CUCKOO_OS_STYLE=""
 CUCKOO_OS_STYLE_FONT_COLOR=""
 CUCKOO_OS_STYLE_BACKGROUND_COLOR=""
 CUCKOO_OS_STYLE_MODE=""
+CUCKOO_OS_NAME_DIST=""
+CUCKOO_OS_NAME_DIST_COLOR=""
 CUCKOO_OS_DIR="$(cd "$(dirname "$0")/.." && pwd -P)/"
 CUCKOO_OS_BIN_DIR="${CUCKOO_OS_DIR}bin/"
 CUCKOO_OS_ETC_DIR="${CUCKOO_OS_DIR}etc/"
@@ -233,6 +235,8 @@ cucko_os_grub_theme_file_name_define()
 #
 cucko_os_grub_theme_files_create()
 {
+    local cuckoo_os_style="$CUCKOO_OS_STYLE"
+
     for style in $CUCKOO_OS_STYLE_LIST
     do
         for dist_name in $(ls "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/background/${style}/linux/"*.png) ""
@@ -255,16 +259,16 @@ cucko_os_grub_theme_files_create()
 # Global Property
 title-text: "GRUB 2"
 title-font: "FreeSans Regular 24"
-title-color: "$CUCKOO_OS_STYLE_FONT_COLOR"
+title-color: "${CUCKOO_OS_STYLE_FONT_COLOR}"
 
 message-font: "Fixed Regular 10"
-#message-color: "#FFFFFF"
-#message-bg-color: "#FFF000"
+message-color: "${CUCKOO_OS_STYLE_FONT_COLOR}"
+message-bg-color: "${CUCKOO_OS_STYLE_BACKGROUND_COLOR}"
 
-desktop-color: "$CUCKOO_OS_STYLE_BACKGROUND_COLOR"
+desktop-color: "${CUCKOO_OS_STYLE_BACKGROUND_COLOR}"
 desktop-image: "background/${style}/${CUCKOO_OS_NAME}${dist_name}.png"
 
-#terminal-box: "menu_item_*.png"
+#terminal-box: "terminal_box_*.png"
 terminal-font: "Fixed Regular 10"
 
 
@@ -277,13 +281,13 @@ terminal-font: "Fixed Regular 10"
     height = 160
     menu_pixmap_style = "background/${style}/menu_item_*.png"
 
-    item_color = "#6a2438"
+    item_color = "${CUCKOO_OS_NAME_DIST_SHADOW_COLOR}"
     item_font = "FreeSans Regular 24"
     item_height = 40
     item_padding = 0
     item_spacing = 0
 
-    selected_item_color = "#a80030"
+    selected_item_color = "${CUCKOO_OS_NAME_DIST_COLOR}"
     selected_item_font = "FreeSans Regular 24"
     selected_item_pixmap_style = "background/${style}/menu_item_select_*.png"
 
@@ -317,45 +321,47 @@ terminal-font: "Fixed Regular 10"
     + label {
         text = "enter: "
         font = "FreeSans Regular 15"
-        color = "#a80030"
+        color = "${CUCKOO_OS_NAME_DIST_COLOR}"
         align = "left"
     }
     + label {
         text = "Boot selection  "
         font = "FreeSans Regular 15"
-        color = "$CUCKOO_OS_STYLE_FONT_COLOR"
+        color = "${CUCKOO_OS_STYLE_FONT_COLOR}"
         align = "left"
     }
 
     + label {
         text = "    e: "
         font = "FreeSans Regular 15"
-        color = "#a80030"
+        color = "${CUCKOO_OS_NAME_DIST_COLOR}"
         align = "left"
     }
     + label {
         text = "Edit selection  "
         font = "FreeSans Regular 15"
-        color = "$CUCKOO_OS_STYLE_FONT_COLOR"
+        color = "${CUCKOO_OS_STYLE_FONT_COLOR}"
         align = "left"
     }
 
     + label {
         text = "    c: "
         font = "FreeSans Regular 15"
-        color = "#a80030"
+        color = "${CUCKOO_OS_NAME_DIST_COLOR}"
         align = "left"
     }
     + label {
         text = "GRUB commandline"
         font = "FreeSans Regular 15"
-        color = "$CUCKOO_OS_STYLE_FONT_COLOR"
+        color = "${CUCKOO_OS_STYLE_FONT_COLOR}"
         align = "left"
     }
 }
 _G_R_U_B__T_H_E_M_E__F_I_L_E
         done
     done
+
+    CUCKOO_OS_STYLE="$cuckoo_os_style"
 }
 
 
@@ -603,7 +609,7 @@ cuckoo_os_linux_install_all()
 # Action options parsing
 cuckoo_os_args_action()
 {
-    case $1 in
+    case "$1" in
         install | i )
             CUCKOO_OS_ACTION="install"
         ;;
@@ -631,21 +637,113 @@ cuckoo_os_args_action()
 # Style options parsing
 cuckoo_os_args_style()
 {
-    case $1 in
+    case "$1" in
         light | l )
             CUCKOO_OS_STYLE="light"
             CUCKOO_OS_STYLE_FONT_COLOR="#484848"
-            CUCKOO_OS_STYLE_BACKGROUND_COLOR="#b7b7b7"
+            CUCKOO_OS_STYLE_BACKGROUND_COLOR="#dbdbdb"
+            case "${CUCKOO_OS_NAME_DIST#/}" in
+                alt )
+                    CUCKOO_OS_NAME_DIST_COLOR="#fdd005"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#fdd937"
+                ;;
+                arch )
+                    CUCKOO_OS_NAME_DIST_COLOR="#1793d1"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#45a9da"
+                ;;
+                debian )
+                    CUCKOO_OS_NAME_DIST_COLOR="#a80030"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#b93359"
+                ;;
+                fedora )
+                    CUCKOO_OS_NAME_DIST_COLOR="#0a57a4"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#3b79b6"
+                ;;
+                opensuse )
+                    CUCKOO_OS_NAME_DIST_COLOR="#73ba25"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#8fc851"
+                ;;
+                ubuntu )
+                    CUCKOO_OS_NAME_DIST_COLOR="#0044aa"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#3369bb"
+                ;;
+                * )
+                    CUCKOO_OS_NAME_DIST_COLOR="#ffc42b"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#ffd055"
+                ;;
+            esac
         ;;
         gray | g | "" )
             CUCKOO_OS_STYLE="gray"
-            CUCKOO_OS_STYLE_FONT_COLOR="#b7b7b7"
+            CUCKOO_OS_STYLE_FONT_COLOR="#dbdbdb"
             CUCKOO_OS_STYLE_BACKGROUND_COLOR="#484848"
+            case "${CUCKOO_OS_NAME_DIST#/}" in
+                alt )
+                    CUCKOO_OS_NAME_DIST_COLOR="#fdd005"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#caae2c"
+                ;;
+                arch )
+                    CUCKOO_OS_NAME_DIST_COLOR="#1793d1"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#3787ae"
+                ;;
+                debian )
+                    CUCKOO_OS_NAME_DIST_COLOR="#a80030"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#942947"
+                ;;
+                fedora )
+                    CUCKOO_OS_NAME_DIST_COLOR="#0a57a4"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#2f6192"
+                ;;
+                opensuse )
+                    CUCKOO_OS_NAME_DIST_COLOR="#73ba25"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#72a041"
+                ;;
+                ubuntu )
+                    CUCKOO_OS_NAME_DIST_COLOR="#0044aa"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#295496"
+                ;;
+                * )
+                    CUCKOO_OS_NAME_DIST_COLOR="#ffc42b"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#cca644"
+                ;;
+            esac
+
         ;;
         dark | d )
             CUCKOO_OS_STYLE="dark"
-            CUCKOO_OS_STYLE_FONT_COLOR="#c8c8c8"
-            CUCKOO_OS_STYLE_BACKGROUND_COLOR="#242424"
+            CUCKOO_OS_STYLE_FONT_COLOR="#bfbfbf"
+            CUCKOO_OS_STYLE_BACKGROUND_COLOR="#161616"
+            case "${CUCKOO_OS_NAME_DIST#/}" in
+                alt )
+                    CUCKOO_OS_NAME_DIST_COLOR="#fdd005"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#988221"
+                ;;
+                arch )
+                    CUCKOO_OS_NAME_DIST_COLOR="#1793d1"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#296583"
+                ;;
+                debian )
+                    CUCKOO_OS_NAME_DIST_COLOR="#a80030"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#6f1f35"
+                ;;
+                fedora )
+                    CUCKOO_OS_NAME_DIST_COLOR="#0a57a4"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#23496d"
+                ;;
+                opensuse )
+                    CUCKOO_OS_NAME_DIST_COLOR="#73ba25"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#567831"
+                ;;
+                ubuntu )
+                    CUCKOO_OS_NAME_DIST_COLOR="#0044aa"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#1f3f70"
+                ;;
+                * )
+                    CUCKOO_OS_NAME_DIST_COLOR="#ffc42b"
+                    CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#997d33"
+                ;;
+            esac
+
         ;;
         * )
             cuckoo_os_error "Invalid style option '${1}'"
@@ -657,7 +755,7 @@ cuckoo_os_args_style()
 # Style options parsing
 cuckoo_os_args_style_mode()
 {
-    case $1 in
+    case "$1" in
         system | s | "" )
             CUCKOO_OS_STYLE_MODE="system"
         ;;
@@ -680,14 +778,26 @@ cuckoo_os_linux_dist_define()
     . /etc/os-release
 
     case "$ID" in
-        debian )
-            CUCKOO_OS_NAME_DIST="/debian"
+        alt )
+            CUCKOO_OS_NAME_DIST="/alt"
         ;;
         arch )
             CUCKOO_OS_NAME_DIST="/arch"
         ;;
+        debian )
+            CUCKOO_OS_NAME_DIST="/debian"
+            CUCKOO_OS_NAME_DIST="/arch"
+        ;;
+        fedora )
+            CUCKOO_OS_NAME_DIST="/fedora"
+        ;;
+        opensuse )
+            CUCKOO_OS_NAME_DIST="/opensuse"
+        ;;
+        ubuntu )
+            CUCKOO_OS_NAME_DIST="/xubuntu"
+        ;;
         * )
-            cuckoo_os_message "WARNING: Current GNU/Linux '${ID}' were not supported"
             CUCKOO_OS_NAME_DIST=""
         ;;
     esac
