@@ -221,7 +221,7 @@ cucko_os_grub_theme_file_name_define()
     local cuckoo_os_name_dist="$2"
 
     [ -z "$cuckoo_os_style" ] && cuckoo_os_style="$CUCKOO_OS_STYLE"
-    [ "$#" -gt 2 ] && [ -z "$cuckoo_os_name_dist" ] && cuckoo_os_name_dist="$CUCKOO_OS_NAME_DIST"
+    [ "$#" -lt 2 ] && [ -z "$cuckoo_os_name_dist" ] && cuckoo_os_name_dist="$CUCKOO_OS_NAME_DIST"
     [ ! -z "$cuckoo_os_name_dist" ] && cuckoo_os_name_dist="-${cuckoo_os_name_dist#/}"
 
     echo "${CUCKOO_OS_NAME}${cuckoo_os_name_dist}-${cuckoo_os_style}.theme"
@@ -364,14 +364,6 @@ cucko_os_grub_theme_dir_create()
     fi
 
     cp -r "$CUCKOO_OS_ETC_GRUB_DIR" "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo"
-#    for grub_theme in $(ls "$CUCKOO_OS_ETC_GRUB_DIR")
-#    do
-#        cp -r "${CUCKOO_OS_ETC_GRUB_DIR}${grub_theme}" "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo-${grub_theme}"
-#
-#        cp -r "${CUCKOO_OS_ETC_BACKGROUND_DIR}${grub_theme}/" "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo-${grub_theme}/background/"
-#        rm -f "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo-${grub_theme}/background/"*.svg
-#        rm -f "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo-${grub_theme}/background/linux/"*.svg
-#    done
 }
 
 
