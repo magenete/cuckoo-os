@@ -786,7 +786,6 @@ cuckoo_os_linux_dist_define()
         ;;
         debian )
             CUCKOO_OS_NAME_DIST="/debian"
-            CUCKOO_OS_NAME_DIST="/arch"
         ;;
         fedora )
             CUCKOO_OS_NAME_DIST="/fedora"
