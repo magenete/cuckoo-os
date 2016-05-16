@@ -640,7 +640,7 @@ cuckoo_os_args_style()
     case "$1" in
         light | l )
             CUCKOO_OS_STYLE="light"
-            CUCKOO_OS_STYLE_FONT_COLOR="#565656"
+            CUCKOO_OS_STYLE_FONT_COLOR="#646464"
             CUCKOO_OS_STYLE_BACKGROUND_COLOR="#dbdbdb"
             case "${CUCKOO_OS_NAME_DIST#/}" in
                 alt )
@@ -711,7 +711,7 @@ cuckoo_os_args_style()
         ;;
         dark | d )
             CUCKOO_OS_STYLE="dark"
-            CUCKOO_OS_STYLE_FONT_COLOR="#565656"
+            CUCKOO_OS_STYLE_FONT_COLOR="#646464"
             CUCKOO_OS_STYLE_BACKGROUND_COLOR="#161616"
             case "${CUCKOO_OS_NAME_DIST#/}" in
                 alt )

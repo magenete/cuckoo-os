@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   inkscape:export-filename="grub-dark-menu_item_select_c.png"
+   inkscape:export-filename="cuckoo-os-grub-dark-menu_item_select_c.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
    sodipodi:docname="menu_item_select_c.svg">
@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="14.06"
-     inkscape:cx="-23.83706"
-     inkscape:cy="10.497835"
+     inkscape:zoom="40"
+     inkscape:cx="0.62997642"
+     inkscape:cy="1.497835"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -46,7 +46,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -61,6 +61,9 @@
        width="4"
        height="4"
        x="0"
-       y="1048.3623" />
+       y="1048.3623"
+       inkscape:export-filename="cuckoo-os-grub-dark-menu_item_select_c.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
   </g>
 </svg>

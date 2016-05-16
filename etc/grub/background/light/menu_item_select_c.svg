@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   inkscape:export-filename="grub-light-menu_item_select_c.png"
+   inkscape:export-filename="cuckoo-os-grub-light-menu_item_select_c.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
    sodipodi:docname="menu_item_select_c.svg">
@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="14.06"
-     inkscape:cx="-11.039388"
-     inkscape:cy="-0.88196585"
+     inkscape:zoom="40"
+     inkscape:cx="-2.7378851"
+     inkscape:cy="2.1180341"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -61,6 +61,6 @@
        width="4"
        height="4"
        x="0"
-       y="1048.3623" />
+       y="1048.3622" />
   </g>
 </svg>
