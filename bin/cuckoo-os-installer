@@ -1,0 +1,273 @@
+#!/bin/sh
+#
+# A desktop-oriented virtual machines management system written in Shell.
+#
+# Code is available online at https://github.com/magenete/cuckoo
+# See LICENSE for licensing information, and README for details.
+#
+# Copyright (C) 2016 Magenete Systems OÜ.
+#
+
+
+CUCKOO_OS_GIT_BRANCH="master"
+CUCKOO_OS_GIT_URL="https://github.com/magenete/cuckoo-os/archive/${CUCKOO_OS_GIT_BRANCH}.tar.gz"
+
+CUCKOO_OS_ACTION=""
+CUCKOO_OS_ACTION_DEFAULT="install"
+CUCKOO_INSTALLER_DIR=".cuckoo/"
+CUCKOO_OS_BRANCH_DIR="${CUCKOO_INSTALLER_DIR}cuckoo-os-${CUCKOO_OS_GIT_BRANCH}/"
+CUCKOO_OS_DIR="$CUCKOO_OS_BRANCH_DIR"
+CUCKOO_OS_LIB_DIR="${CUCKOO_OS_DIR}lib/"
+CUCKOO_OS_ETC_DIR="${CUCKOO_OS_DIR}etc/"
+CUCKOO_OS_ETC_VERSION_FILE="${CUCKOO_OS_ETC_DIR}VERSION"
+CUCKOO_OS_BIN_DIR="${CUCKOO_OS_DIR}bin/"
+CUCKOO_OS_BIN_FILE="${CUCKOO_OS_BIN_DIR}cuckoo-os"
+CUCKOO_OS_VERBOSE=""
+
+HOME_SHELL_PROFILE_FILES=".bash_profile .bashrc .mkshrc .profile .zlogin .zshrc"
+
+
+# Help message
+cuckoo_os_help()
+{
+    cat << _H_E_L_P
+
+Usage: $(basename $0) [arguments]
+
+Cuckoo install/uninstall script.
+
+  i, install    Install Cuckoo OS (by default).
+  u, uninstall  Uninstall Cuckoo OS.
+  v, verbose    Print log messages.
+
+     version    Print the current version.
+  h, help       Show this message.
+
+_H_E_L_P
+}
+
+
+# Print help, error message and exit
+cuckoo_os_error()
+{
+    cuckoo_os_help
+
+    echo ""
+    echo "ERROR: ${1}"
+    echo ""
+
+    exit 1
+}
+
+
+# Print message
+cuckoo_os_message()
+{
+    echo ""
+    echo "$1"
+    echo ""
+}
+
+
+# Cuckoo OS install
+cuckoo_os_install()
+{
+    # Make project directory and download source from Git
+    mkdir $CUCKOO_OS_VERBOSE -p "${HOME}/${CUCKOO_INSTALLER_DIR}" && cd "${HOME}/${CUCKOO_INSTALLER_DIR}"
+    if [ $? -gt 0 ]
+    then
+        cuckoo_os_error "Could not create directory '${HOME}/${CUCKOO_INSTALLER_DIR}'"
+    else
+        [ "$CUCKOO_OS_VERBOSE" != "" ] && cuckoo_os_message "Directory '${HOME}/${CUCKOO_INSTALLER_DIR}' was created"
+
+        curl -$([ "$CUCKOO_OS_VERBOSE" = "" ] && echo "s" || echo "")SL "$CUCKOO_OS_GIT_URL" | tar -xz $CUCKOO_OS_VERBOSE
+        if [ $? -gt 0 ]
+        then
+            cuckoo_os_error "Could not download file '$CUCKOO_OS_GIT_URL'"
+        else
+            [ "$CUCKOO_OS_VERBOSE" != "" ] && cuckoo_os_message "Source code was downloaded from '$CUCKOO_OS_GIT_URL'"
+        fi
+    fi
+
+    if [ -f "${HOME}/${CUCKOO_OS_BIN_FILE}" ]
+    then
+        # Common
+        chmod $CUCKOO_OS_VERBOSE 0700 "${HOME}/${CUCKOO_INSTALLER_DIR}"
+        chmod $CUCKOO_OS_VERBOSE 0700 "${HOME}/${CUCKOO_OS_DIR}../"
+
+        cuckoo_os_cuckoo_install
+
+        cuckoo_os_add_bin_path
+    else
+        cuckoo_os_error "Bin file '${HOME}/${CUCKOO_OS_BIN_FILE}' does not exist"
+    fi
+}
+
+
+# Cuckoo OS install Cuckoo
+cuckoo_os_cuckoo_install()
+{
+    chmod $CUCKOO_OS_VERBOSE 0700 "${HOME}/${CUCKOO_OS_DIR}"
+    chmod $CUCKOO_OS_VERBOSE 0700 "${HOME}/${CUCKOO_OS_DIR}"*
+
+    # Bin
+    chmod $CUCKOO_OS_VERBOSE 0700 "${HOME}/${CUCKOO_OS_BIN_DIR}"*
+    chmod $CUCKOO_OS_VERBOSE 0600 "${HOME}/${CUCKOO_OS_BIN_DIR}"*.bat
+
+    # Etc
+    chmod $CUCKOO_OS_VERBOSE 0700 "${HOME}/${CUCKOO_OS_ETC_DIR}"*
+    chmod $CUCKOO_OS_VERBOSE 0600 "${HOME}/${CUCKOO_OS_ETC_VERSION_FILE}"
+
+    # Lib
+#    chmod $CUCKOO_OS_VERBOSE 0600 "${HOME}/${CUCKOO_OS_LIB_DIR}"*
+#    chmod $CUCKOO_OS_VERBOSE 0700 "${HOME}/${CUCKOO_OS_LIB_DIR}mgt/"
+#    chmod $CUCKOO_OS_VERBOSE 0600 "${HOME}/${CUCKOO_OS_LIB_DIR}mgt/"*
+}
+
+
+# Add Cuckoo OS bin path in PATH
+cuckoo_os_add_bin_path()
+{
+    if [ "$CUCKOO_OS_VERBOSE" != "" ]
+    then
+        echo ""
+        echo "Cuckoo OS bin path was added in PATH in the following file(s):"
+    fi
+
+    for shell_profile_file in $HOME_SHELL_PROFILE_FILES
+    do
+        if [ -f "${HOME}/${shell_profile_file}" ]
+        then
+            echo "" >> "${HOME}/${shell_profile_file}"
+            echo "export PATH=\"\${PATH}:\${HOME}/${CUCKOO_OS_BIN_DIR}\"  # Add Cuckoo OS to PATH for scripting" >> "${HOME}/${shell_profile_file}"
+
+            [ "$CUCKOO_OS_VERBOSE" != "" ] && echo "    '${HOME}/${shell_profile_file}'"
+        fi
+    done
+
+    [ "$CUCKOO_OS_VERBOSE" != "" ] && echo ""
+
+    # Export new PATH
+    export PATH="${PATH}:${HOME}/${CUCKOO_OS_BIN_DIR}"
+}
+
+
+# Answer for uninstall
+cuckoo_os_uninstall_answer()
+{
+    printf "This will completely uninstall cuckoo. Continue? (y/N):"
+    read uninstall_answer
+
+    case $uninstall_answer in
+        Y | y | Yes | yes )
+            rm $CUCKOO_OS_VERBOSE -rf "${HOME}/${CUCKOO_OS_BRANCH_DIR}"
+
+            cuckoo_os_message "Directory '${HOME}/${CUCKOO_OS_BRANCH_DIR}' deleted"
+        ;;
+        "" | N | n | No | no )
+            cuckoo_os_message "Directory '${HOME}/${CUCKOO_OS_BRANCH_DIR}' not deleted"
+        ;;
+        * )
+            cuckoo_os_message "Please use Y|y|Yes|yes|N|n|No|no or just enter (by default No)."
+
+            cuckoo_os_uninstall_answer
+        ;;
+    esac
+}
+
+
+# Uninstall
+cuckoo_os_uninstall()
+{
+    # Information about Cuckoo OS bin path deleting in profile files
+    echo ""
+    echo "Please delete Cuckoo OS bin path from PATH in the following files:"
+
+    for shell_profile_file in $HOME_SHELL_PROFILE_FILES
+    do
+        if [ -f "${HOME}/${shell_profile_file}" ]
+        then
+            echo "    ${HOME}/${shell_profile_file}"
+        fi
+    done
+
+    # Directory delete after getting an answer
+    if [ -d "${HOME}/${CUCKOO_OS_BRANCH_DIR}" ]
+    then
+        cuckoo_os_message "Everything will be deleted in '${HOME}/${CUCKOO_OS_BRANCH_DIR}'!"
+
+        cuckoo_os_uninstall_answer
+
+        [ -z "$(ls "${HOME}/${CUCKOO_INSTALLER_DIR}")" ] && rm -rf "${HOME}/${CUCKOO_INSTALLER_DIR}"
+    else
+        cuckoo_os_error "Directory '${HOME}/${CUCKOO_OS_BRANCH_DIR}' does not exist"
+    fi
+}
+
+
+# Options definition
+case "$1" in
+    install | i )
+        CUCKOO_OS_ACTION="install"
+    ;;
+    uninstall | u )
+        CUCKOO_OS_ACTION="uninstall"
+    ;;
+    verbose | v )
+        CUCKOO_OS_VERBOSE="-v"
+    ;;
+    version )
+        echo "Cuckoo OS version: 0.2.0"
+        exit 0
+    ;;
+    help | h )
+        cuckoo_os_help
+        exit 0
+    ;;
+    * )
+        cuckoo_os_error "Invalid option '${1}'"
+    ;;
+esac
+
+if [ ! -z "$1" ] && [ ! -z "$2" ]
+then
+    case "$2" in
+        install | i )
+            CUCKOO_OS_ACTION="install"
+        ;;
+        uninstall | u )
+            CUCKOO_OS_ACTION="uninstall"
+        ;;
+        verbose | v )
+            case "$1" in
+                verbose | v )
+                    cuckoo_os_error "Invalid option '${2}'"
+                ;;
+                * )
+                    CUCKOO_OS_VERBOSE="-v"
+                ;;
+            esac
+        ;;
+        * )
+            cuckoo_os_error "Invalid option '${2}'"
+        ;;
+    esac
+fi
+
+
+# Launch
+if [ "$(whoami)" = "$USER" ] && [ "$(basename $HOME)" = "$USER" ]
+then
+    [ -z "$CUCKOO_OS_ACTION" ] && CUCKOO_OS_ACTION="$CUCKOO_OS_ACTION_DEFAULT"
+
+    case "$CUCKOO_OS_ACTION" in
+        install )
+            cuckoo_os_install
+        ;;
+        uninstall )
+            cuckoo_os_uninstall
+        ;;
+    esac
+else
+    cuckoo_os_error "Invalid ENV of current user '$USER'"
+fi
