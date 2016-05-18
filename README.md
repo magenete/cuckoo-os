@@ -14,7 +14,9 @@ Installation
 Quick network-based install:
 
     curl -SL https://raw.githubusercontent.com/magenete/cuckoo-os/master/bin/cuckoo-os-installer | sh -s verbose
+
 or
+
     curl -sSL https://raw.githubusercontent.com/magenete/cuckoo-os/master/bin/cuckoo-os-installer | sh
 
 
@@ -22,7 +24,9 @@ or
 Alternative local install (e.g. after cloning git repo, etc.) in verbose mode:
 
     cuckoo-os-installer install verbose
+
 or
+
     cuckoo-os-installer i
 
 
