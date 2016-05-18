@@ -5,7 +5,7 @@ A management system for desktop-oriented virtual machines (based on QEMU) writte
 
 Uses Shell (not Bash) with following system utilities:
 
-    basename, echo, ls, cat, cp, rm, mkdir, chmod, getopt, cd, pwd, uname, curl, tar
+    basename, dirname, echo, ls, cat, cp, rm, mkdir, chmod, getopt, cd, pwd, uname, curl, tar
 
 
 Installation

@@ -1,0 +1,43 @@
+#!/bin/sh
+#
+# A desktop-oriented virtual machines management system written in Shell.
+#
+# Code is available online at https://github.com/magenete/cuckoo
+# See LICENSE for licensing information, and README for details.
+#
+# Copyright (C) 2016 Magenete Systems OÜ.
+#
+
+
+CUCKOO_OS_DIR="${CUCKOO_OS_DIR:=$(cd "$(dirname "$0")/.." && pwd -P)}/"
+
+CUCKOO_OS_ACTION=""
+CUCKOO_OS_STYLE=""
+CUCKOO_OS_STYLE_FONT_COLOR=""
+CUCKOO_OS_STYLE_BACKGROUND_COLOR=""
+CUCKOO_OS_STYLE_MODE=""
+CUCKOO_OS_NAME_DIST=""
+CUCKOO_OS_NAME_DIST_COLOR=""
+
+
+# Load all Cuckoo OS MGT libs
+for mgt_lib_file in $(ls "${CUCKOO_OS_DIR}lib/mgt/"*.sh)
+do
+    . "$mgt_lib_file"
+done
+
+
+# Launch
+if [ "$(whoami)" = "$USER" ] && [ "$(basename $HOME)" = "$USER" ]
+then
+    cuckoo_os_name_define
+
+    cuckoo_os_args_action "$1"
+    cuckoo_os_args_style "$2"
+    cuckoo_os_args_style_mode "$3"
+
+    cuckoo_os_${CUCKOO_OS_NAME}_${CUCKOO_OS_ACTION}
+    cuckoo_os_${CUCKOO_OS_NAME}_${CUCKOO_OS_ACTION}_${CUCKOO_OS_STYLE_MODE}
+else
+    cuckoo_os_error "Invalid ENV of current user '$USER'"
+fi

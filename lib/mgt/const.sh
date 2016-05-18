@@ -9,7 +9,5 @@
 #
 
 
-CUCKOO_OS_DIR="$(cd "$(dirname "$0")/.." && pwd -P)"
-
-
-. "${CUCKOO_OS_DIR}/lib/mgt.sh" $@
+CUCKOO_OS_STYLE_LIST="light gray dark"
+CUCKOO_OS_STYLE_DEFAULT="gray"
