@@ -8,7 +8,7 @@
 #
 
 
-#
+# Define Cuckoo theme by style
 cucko_os_style_theme_define()
 {
     case "$1" in
@@ -140,32 +140,6 @@ cuckoo_os_args_style_dark()
         * )
             CUCKOO_OS_NAME_DIST_COLOR="#ffc42b"
             CUCKOO_OS_NAME_DIST_SHADOW_COLOR="#997d33"
-        ;;
-    esac
-}
-
-
-# Style options parsing
-cuckoo_os_args_style()
-{
-    case "$1" in
-        light | l )
-            CUCKOO_OS_STYLE="light"
-
-            cuckoo_os_args_style_light
-        ;;
-        gray | g | "" )
-            CUCKOO_OS_STYLE="gray"
-
-            cuckoo_os_args_style_gray
-        ;;
-        dark | d )
-            CUCKOO_OS_STYLE="dark"
-
-            cuckoo_os_args_style_dark
-        ;;
-        * )
-            cuckoo_os_error "Invalid style option '${1}'"
         ;;
     esac
 }

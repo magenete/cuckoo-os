@@ -12,6 +12,7 @@
 CUCKOO_OS_DIR="${CUCKOO_OS_DIR:=$(cd "$(dirname "$0")/.." && pwd -P)}/"
 
 CUCKOO_OS_ACTION=""
+CUCKOO_OS_NAME=""
 CUCKOO_OS_STYLE=""
 CUCKOO_OS_STYLE_FONT_COLOR=""
 CUCKOO_OS_STYLE_BACKGROUND_COLOR=""
@@ -30,11 +31,11 @@ done
 # Launch
 if [ "$(whoami)" = "$USER" ] && [ "$(basename $HOME)" = "$USER" ]
 then
-    cuckoo_os_name_define
+    cuckoo_os_env
 
-    cuckoo_os_args_action "$1"
-    cuckoo_os_args_style "$2"
-    cuckoo_os_args_style_mode "$3"
+    cuckoo_os_args $@
+
+    cuckoo_os_variables_check
 
     cuckoo_os_${CUCKOO_OS_NAME}_${CUCKOO_OS_ACTION}
     cuckoo_os_${CUCKOO_OS_NAME}_${CUCKOO_OS_ACTION}_${CUCKOO_OS_STYLE_MODE}

@@ -17,24 +17,19 @@ Usage: $(basename $0) [actions] [arguments]
 
 Cuckoo OS style install/uninstall script.
 
-  Action:
+  Actions:
 
-    -i, --install      Install Cuckoo OS (by default).
-    -u, --uninstall    Uninstall Cuckoo OS.
-    -s, --select       Select mode.
+    -i, --install    Install Cuckoo OS (by default).
+    -u, --uninstall  Uninstall Cuckoo OS.
+    -s, --select     Select style and mode.
 
-        --version      Print the current version.
-    -h, --help         Show this message.
+        --version    Print the current version.
+    -h, --help       Show this message.
 
   Arguments:
 
-    -l, --style-light  Set light theme.
-    -g, --style-gray   Set gray theme (by default).
-    -d, --style-dark   Set dark theme.
-
-    -S, --system       Set system themes (by default).
-    -U, --user         Set user themes.
-    -A, --all          Set system and user themes.
+    -S, --style      Set theme style. Styles: $(from_arr_to_str "$CUCKOO_OS_STYLE_LIST").
+    -M, --mode       Set style mode. Style modes: $(from_arr_to_str "$CUCKOO_OS_STYLE_MODE_LIST").
 
 _H_E_L_P
 }

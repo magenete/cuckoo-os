@@ -25,15 +25,13 @@ cucko_os_grub_theme_file_name_define()
 #
 cucko_os_grub_theme_files_create()
 {
-    local cuckoo_os_style="$CUCKOO_OS_STYLE"
-
     for style in $CUCKOO_OS_STYLE_LIST
     do
         for dist_name in $(ls "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/background/${style}/linux/"*.png) ""
         do
             [ ! -z "$dist_name" ] && dist_name="/$(basename "$dist_name" .png)"
 
-            cuckoo_os_args_style "$style"
+            cuckoo_os_args_style_$style
 
             cat > "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/$(cucko_os_grub_theme_file_name_define "$style" "$dist_name")" << _G_R_U_B__T_H_E_M_E__F_I_L_E
 #
@@ -150,8 +148,6 @@ terminal-font: "Fixed Regular 10"
 _G_R_U_B__T_H_E_M_E__F_I_L_E
         done
     done
-
-    CUCKOO_OS_STYLE="$cuckoo_os_style"
 }
 
 

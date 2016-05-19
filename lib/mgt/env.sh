@@ -11,23 +11,6 @@
 # Cuckoo OS environment
 cuckoo_os_env()
 {
-    case $(uname -m) in
-        x86_64 | amd64 )
-            CUCKOO__OSARCH="${CUCKOO_OS_ARCH:=x86_64}"
-        ;;
-        x86 | i386 | i486 | i586 | i686 | i786 )
-            CUCKOO_OS_ARCH="${CUCKOO_OS_ARCH:=x86}"
-        ;;
-        * )
-            cuckoo_os_error "Current OS architecture is not supported"
-        ;;
-    esac
-}
-
-
-# Define OS name
-cuckoo_os_name_define()
-{
     case $(uname -s) in
         Linux )
             CUCKOO_OS_NAME="linux"

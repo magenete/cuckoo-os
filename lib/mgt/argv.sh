@@ -11,8 +11,8 @@
 # Options definition
 cuckoo_os_args()
 {
-    ARGS_SHORT="iuVh"
-    ARGS_LONG="install,uninstall,version,help"
+    ARGS_SHORT="iusS:M:Vh"
+    ARGS_LONG="install,uninstall,select,style:,mode:,version,help"
     OPTS="$(getopt -o "${ARGS_SHORT}" -l "${ARGS_LONG}" -a -- "$@" 2>/dev/null)"
     if [ $? -gt 0 ]
     then
@@ -36,23 +36,38 @@ cuckoo_os_args()
             shift 1
         ;;
         --uninstall | -u )
-            CUCKOO_OS_ACTION="run"
+            CUCKOO_OS_ACTION="uninstall"
+            shift 1
+        ;;
+        --select | -s )
+            CUCKOO_OS_ACTION="select"
             shift 1
         ;;
 
     # Arguments
 
-        --dist-version | -v )
-            if [ "$(cuckoo_dist_version_value_check "$2")" = "" ]
+        --style | -S )
+            if [ "$(valid_value_in_arr "$CUCKOO_OS_STYLE_LIST" "$2")" = "" ]
             then
-                cuckoo_os_error "Invalid distributive/version '${2}'"
+                cuckoo_os_error "Cuckoo OS style '${2}' is not supported"
             else
-                CUCKOO_OS_DIST_VERSION="$2"
+                CUCKOO_OS_STYLE="$2"
+
+                cuckoo_os_args_style_$CUCKOO_OS_STYLE
+            fi
+            shift 2
+        ;;
+        --mode | -M )
+            if [ "$(valid_value_in_arr "$CUCKOO_OS_STYLE_MODE_LIST" "$2")" = "" ]
+            then
+                cuckoo_os_error "Cuckoo OS style mode '${2}' is not supported"
+            else
+                CUCKOO_OS_STYLE_MODE="$2"
             fi
             shift 2
         ;;
         --version | -V )
-            echo "Cuckoo version: $(cat "${CUCKOO_ETC_VERSION_FILE}")"
+            echo "Cuckoo OS version: $(cat "$CUCKOO_OS_ETC_VERSION_FILE")"
             exit 0
         ;;
         --help | -h )
@@ -64,52 +79,4 @@ cuckoo_os_args()
         ;;
         esac
     done
-}
-
-
-# Style options parsing
-cuckoo_os_args_style_mode()
-{
-    case "$1" in
-        system | s | "" )
-            CUCKOO_OS_STYLE_MODE="system"
-        ;;
-        user | u )
-            CUCKOO_OS_STYLE_MODE="user"
-        ;;
-        all | a )
-            CUCKOO_OS_STYLE_MODE="all"
-        ;;
-        * )
-            cuckoo_os_error "Invalid mode option '${1}'"
-        ;;
-    esac
-}
-
-
-# Action options parsing
-cuckoo_os_args_action()
-{
-    case "$1" in
-        install | i )
-            CUCKOO_OS_ACTION="install"
-        ;;
-        uninstall | u )
-            CUCKOO_OS_ACTION="uninstall"
-        ;;
-        select | s )
-            CUCKOO_OS_ACTION="select"
-        ;;
-        version )
-            echo "Cuckoo OS version: $(cat "$CUCKOO_OS_ETC_VERSION_FILE")"
-            exit 0
-        ;;
-        help | h )
-            cuckoo_os_help
-            exit 0
-        ;;
-        * )
-            cuckoo_os_error "Invalid action option '${1}'"
-        ;;
-    esac
 }
