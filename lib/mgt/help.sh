@@ -21,15 +21,18 @@ Cuckoo OS style install/uninstall script.
 
     -i, --install    Install Cuckoo OS (by default).
     -u, --uninstall  Uninstall Cuckoo OS.
-    -s, --select     Select style and mode.
+    -e, --select     Select style and mode.
 
-        --version    Print the current version.
+    -V, --version    Print the current version.
     -h, --help       Show this message.
 
   Arguments:
 
-    -S, --style      Set theme style. Styles: $(from_arr_to_str "$CUCKOO_OS_STYLE_LIST").
-    -M, --mode       Set style mode. Style modes: $(from_arr_to_str "$CUCKOO_OS_STYLE_MODE_LIST").
+    -y, --style      Set theme style. Styles: $(from_arr_to_str "$CUCKOO_OS_STYLE_LIST").
+    -m, --mode       Set style mode. Style modes: $(from_arr_to_str "$CUCKOO_OS_STYLE_MODE_LIST").
+    -s, --su         Run from superuser (root), using su.
+    -U, --su-user    Run from some different user, using su.
+    -S, --sudo       Run using sudo.
 
 _H_E_L_P
 }

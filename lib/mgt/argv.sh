@@ -11,8 +11,8 @@
 # Options definition
 cuckoo_os_args()
 {
-    ARGS_SHORT="iusS:M:Vh"
-    ARGS_LONG="install,uninstall,select,style:,mode:,version,help"
+    ARGS_SHORT="iuey:m:sU:SVh"
+    ARGS_LONG="install,uninstall,select,style:,mode:,su,su-user:,sudo,version,help"
     OPTS="$(getopt -o "${ARGS_SHORT}" -l "${ARGS_LONG}" -a -- "$@" 2>/dev/null)"
     if [ $? -gt 0 ]
     then
@@ -43,11 +43,19 @@ cuckoo_os_args()
             CUCKOO_OS_ACTION="select"
             shift 1
         ;;
+        --version | -V )
+            echo "Cuckoo OS version: $(cat "$CUCKOO_OS_ETC_VERSION_FILE")"
+            exit 0
+        ;;
+        --help | -h )
+            cuckoo_os_help
+            exit 0
+        ;;
 
     # Arguments
 
-        --style | -S )
-            if [ "$(valid_value_in_arr "$CUCKOO_OS_STYLE_LIST" "$2")" = "" ]
+        --style | -y )
+            if [ -z "$(valid_value_in_arr "$CUCKOO_OS_STYLE_LIST" "$2")" ]
             then
                 cuckoo_os_error "Cuckoo OS style '${2}' is not supported"
             else
@@ -57,8 +65,8 @@ cuckoo_os_args()
             fi
             shift 2
         ;;
-        --mode | -M )
-            if [ "$(valid_value_in_arr "$CUCKOO_OS_STYLE_MODE_LIST" "$2")" = "" ]
+        --mode | -m )
+            if [ -z "$(valid_value_in_arr "$CUCKOO_OS_STYLE_MODE_LIST" "$2")" ]
             then
                 cuckoo_os_error "Cuckoo OS style mode '${2}' is not supported"
             else
@@ -66,17 +74,49 @@ cuckoo_os_args()
             fi
             shift 2
         ;;
-        --version | -V )
-            echo "Cuckoo OS version: $(cat "$CUCKOO_OS_ETC_VERSION_FILE")"
-            exit 0
+        --su | -s )
+            CUCKOO_OS_SUPERUSER_COMMAND="su --login root"
+            shift 1
         ;;
-        --help | -h )
-            cuckoo_os_help
-            exit 0
+        --su-user | -U )
+            CUCKOO_OS_SUPERUSER_COMMAND="su --login ${2}"
+            shift 2
+        ;;
+        --sudo | -S )
+            CUCKOO_OS_SUPERUSER_COMMAND="sudo"
+            shift 1
         ;;
         * )
             cuckoo_os_error "Invalid option(s)"
         ;;
+        esac
+    done
+}
+
+
+#
+cuckoo_os_args_without_superuser()
+{
+    local cuckoo_os_superuser_arg=""
+
+    for arg in $@
+    do
+        case "$arg" in
+            --sudo | -S | --su | -s )
+                echo ""
+            ;;
+            --su-user | -U )
+                cuckoo_os_superuser_arg="yes"
+            ;;
+            * )
+                if [ -z "$cuckoo_os_superuser_arg" ]
+                then
+                    echo "$arg"
+                else
+                    cuckoo_os_superuser_arg=""
+                    echo ""
+                fi
+            ;;
         esac
     done
 }

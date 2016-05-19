@@ -19,6 +19,7 @@ CUCKOO_OS_STYLE_BACKGROUND_COLOR=""
 CUCKOO_OS_STYLE_MODE=""
 CUCKOO_OS_NAME_DIST=""
 CUCKOO_OS_NAME_DIST_COLOR=""
+CUCKOO_OS_SUPERUSER_COMMAND=""
 
 
 # Load all Cuckoo OS MGT libs
@@ -37,8 +38,15 @@ then
 
     cuckoo_os_variables_check
 
-    cuckoo_os_${CUCKOO_OS_NAME}_${CUCKOO_OS_ACTION}
-    cuckoo_os_${CUCKOO_OS_NAME}_${CUCKOO_OS_ACTION}_${CUCKOO_OS_STYLE_MODE}
+    if [ "$CUCKOO_OS_SUPERUSER_COMMAND" = "sudo" ]
+    then
+        $CUCKOO_OS_SUPERUSER_COMMAND sh -c "\"${CUCKOO_OS_DIR}bin/cuckoo-os\" \"$(cuckoo_os_args_without_superuser "$@")\""
+    elif [ -z "$CUCKOO_OS_SUPERUSER_COMMAND" ]
+    then
+        cuckoo_os_${CUCKOO_OS_NAME}_${CUCKOO_OS_ACTION}
+    else
+        $CUCKOO_OS_SUPERUSER_COMMAND --command "\"${CUCKOO_OS_DIR}bin/cuckoo-os\" \"$(cuckoo_os_args_without_superuser "$@")\""
+    fi
 else
     cuckoo_os_error "Invalid ENV of current user '$USER'"
 fi

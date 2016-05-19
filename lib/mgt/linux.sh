@@ -61,8 +61,10 @@ cuckoo_os_linux_uninstall()
     if [ -d "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR" ]
     then
         rm -rf "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo"*
-        [ "$(ls "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR")" = "" ] && rm -rf "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR"
+        [ -z "$(ls "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR")" ] && rm -rf "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR"
     fi
+
+    cuckoo_os_linux_uninstall_$CUCKOO_OS_STYLE_MODE
 }
 
 
@@ -95,13 +97,15 @@ cuckoo_os_linux_select()
     then
         cucko_os_lightdm_gtk_greeter_files_create
     fi
+
+    cuckoo_os_linux_select_$CUCKOO_OS_STYLE_MODE
 }
 
 
 #
 cuckoo_os_linux_install_system()
 {
-    if [ "$CUCKOO_OS_STYLE" != "" ]
+    if [ ! -z "$CUCKOO_OS_STYLE" ]
     then
         # LightDM
         ln -sf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cucko_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
@@ -183,6 +187,8 @@ cuckoo_os_linux_install()
 
     cucko_os_lightdm_conf_dir_create
     cucko_os_lightdm_conf_file_create
+
+    cuckoo_os_linux_install_$CUCKOO_OS_STYLE_MODE
 }
 
 

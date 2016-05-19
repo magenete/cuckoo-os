@@ -119,9 +119,9 @@ cuckoo_os_cuckoo_install()
     chmod $CUCKOO_OS_VERBOSE 0600 "${HOME}/${CUCKOO_OS_ETC_VERSION_FILE}"
 
     # Lib
-#    chmod $CUCKOO_OS_VERBOSE 0600 "${HOME}/${CUCKOO_OS_LIB_DIR}"*
-#    chmod $CUCKOO_OS_VERBOSE 0700 "${HOME}/${CUCKOO_OS_LIB_DIR}mgt/"
-#    chmod $CUCKOO_OS_VERBOSE 0600 "${HOME}/${CUCKOO_OS_LIB_DIR}mgt/"*
+    chmod $CUCKOO_OS_VERBOSE 0600 "${HOME}/${CUCKOO_OS_LIB_DIR}"*
+    chmod $CUCKOO_OS_VERBOSE 0700 "${HOME}/${CUCKOO_OS_LIB_DIR}mgt/"
+    chmod $CUCKOO_OS_VERBOSE 0600 "${HOME}/${CUCKOO_OS_LIB_DIR}mgt/"*
 }
 
 
