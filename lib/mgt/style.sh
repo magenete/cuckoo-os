@@ -62,6 +62,7 @@ cuckoo_os_style_xfce_theme_define()
     xfconf-query -c "xsettings" -p "/Xft/Antialias" -t "int" -s "1"
     xfconf-query -c "xsettings" -p "/Xft/HintStyle" -t "string" -s "$CUCKOO_OS_STYLE_THEME_FONT_HINT"
     xfconf-query -c "xsettings" -p "/Xft/RGBA" -t "string" -s "$CUCKOO_OS_STYLE_THEME_FONT_RGBA"
+    xfconf-query -c "xsettings" -p "/Xfce/LastCustomDPI" -t "int" -s "$CUCKOO_OS_STYLE_THEME_FONT_DPI"
     xfconf-query -c "xsettings" -p "/Xft/DPI" -t "int" -s "$CUCKOO_OS_STYLE_THEME_FONT_DPI"
 
     if [ -d "${CUCKOO_OS_SYSTEM_THEMES_DIR}${CUCKOO_OS_STYLE_THEME}" ]
