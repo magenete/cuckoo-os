@@ -71,7 +71,24 @@ cuckoo_os_linux_uninstall()
 #
 cuckoo_os_linux_select_system()
 {
-    cuckoo_os_linux_install_system
+    if [ ! -z "$CUCKOO_OS_STYLE" ]
+    then
+        if [ ! -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cuckoo_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" ]
+        then
+            cuckoo_os_lightdm_gtk_greeter_files_create
+        fi
+
+        # LightDM
+        ln -sf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cuckoo_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
+
+        # GRUB
+        export GRUB_BACKGROUND="${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/background/${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.png"
+        export GRUB_THEME="${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/$(cuckoo_os_grub_theme_file_name_define)"
+        export GRUB_GFXMODE="${CUCKOO_OS_SYSTEM_GRUB_SCREEN_SIZE}x24"
+        export GRUB_GFXPAYLOAD_LINUX="keep"
+
+        grub-mkconfig -o "$CUCKOO_OS_SYSTEM_GRUB_CONFIG_FILE"
+    fi
 }
 
 
@@ -90,55 +107,15 @@ cuckoo_os_linux_select_all()
 }
 
 
-#
+# Select
 cuckoo_os_linux_select()
 {
-    if [ ! -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cuckoo_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" ]
-    then
-        cuckoo_os_lightdm_gtk_greeter_files_create
-    fi
-
     cuckoo_os_linux_select_$CUCKOO_OS_STYLE_MODE
 }
 
 
-#
+# Install and set only for system
 cuckoo_os_linux_install_system()
-{
-    if [ ! -z "$CUCKOO_OS_STYLE" ]
-    then
-        # LightDM
-        ln -sf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cuckoo_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
-
-        # GRUB
-        export GRUB_BACKGROUND="${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/background/${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.png"
-        export GRUB_THEME="${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/$(cuckoo_os_grub_theme_file_name_define)"
-        export GRUB_GFXMODE="${CUCKOO_OS_SYSTEM_GRUB_SCREEN_SIZE}x24"
-        export GRUB_GFXPAYLOAD_LINUX="keep"
-
-        grub-mkconfig -o "$CUCKOO_OS_SYSTEM_GRUB_CONFIG_FILE"
-    fi
-}
-
-
-#
-cuckoo_os_linux_install_user()
-{
-    cuckoo_os_style_xfce_theme_install
-    cuckoo_os_style_xfce_theme_define
-}
-
-
-#
-cuckoo_os_linux_install_all()
-{
-    cuckoo_os_linux_install_system
-    cuckoo_os_linux_install_user
-}
-
-
-#
-cuckoo_os_linux_install()
 {
     if [ -e "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR" ] && [ -d "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR" ]
     then
@@ -190,6 +167,29 @@ cuckoo_os_linux_install()
     cuckoo_os_lightdm_conf_dir_create
     cuckoo_os_lightdm_conf_file_create
 
+    cuckoo_os_linux_select_system
+}
+
+
+# Install and set only for user
+cuckoo_os_linux_install_user()
+{
+    cuckoo_os_style_xfce_theme_install
+    cuckoo_os_style_xfce_theme_define
+}
+
+
+# Install all
+cuckoo_os_linux_install_all()
+{
+    cuckoo_os_linux_install_system
+    cuckoo_os_linux_install_user
+}
+
+
+# Install by mode
+cuckoo_os_linux_install()
+{
     cuckoo_os_linux_install_$CUCKOO_OS_STYLE_MODE
 }
 

@@ -62,8 +62,8 @@ cuckoo_os_style_xfce_theme_define()
     xfconf-query -c "xsettings" -p "/Xft/Antialias" -t "int" -s "1"
     xfconf-query -c "xsettings" -p "/Xft/HintStyle" -t "string" -s "$CUCKOO_OS_STYLE_THEME_FONT_HINT"
     xfconf-query -c "xsettings" -p "/Xft/RGBA" -t "string" -s "$CUCKOO_OS_STYLE_THEME_FONT_RGBA"
-    xfconf-query -c "xsettings" -p "/Xfce/LastCustomDPI" -t "int" -s "$CUCKOO_OS_STYLE_THEME_FONT_DPI"
-    xfconf-query -c "xsettings" -p "/Xft/DPI" -t "int" -s "$CUCKOO_OS_STYLE_THEME_FONT_DPI"
+    xfconf-query -c "xsettings" -p "/Xfce/LastCustomDPI" -n -t "int" -s "$CUCKOO_OS_STYLE_THEME_FONT_DPI"
+    xfconf-query -c "xsettings" -p "/Xft/DPI" -n -t "int" -s "$CUCKOO_OS_STYLE_THEME_FONT_DPI"
 
     if [ -d "${CUCKOO_OS_SYSTEM_THEMES_DIR}${CUCKOO_OS_STYLE_THEME}" ]
     then
@@ -101,6 +101,11 @@ cuckoo_os_style_xfce_theme_uninstall()
     then
         mv -f "${CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DISPLAYS_XML_FILE}.backup" "$CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DISPLAYS_XML_FILE"
     fi
+
+    xfconf-query -c "xfce4-desktop" -p "/backdrop/screen0/monitor0" -R -r
+    xfconf-query -c "xsettings" -p "/Xft" -R -r
+    xfconf-query -c "xsettings" -p "/Net" -R -r
+    xfconf-query -c "xsettings" -p "/Gtk" -R -r
 }
 
 
