@@ -158,6 +158,7 @@ cuckoo_os_linux_install()
         cuckoo_os_error "Could not copy from '$CUCKOO_OS_ETC_BACKGROUND_DIR' to '$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR'"
     fi
     chown -R root.root "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR"
+    chmod 0755 "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR"*
 
     # XFce themes
     for xfce_theme in $(ls "$CUCKOO_OS_ETC_XFCE_THEME_DIR")
