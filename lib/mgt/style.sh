@@ -78,6 +78,7 @@ cuckoo_os_style_xfce_theme_define()
     if [ -f "$cuckoo_os_background_file" ]
     then
         xfconf-query -c "xfce4-desktop" -p "/backdrop/screen0/monitor0/image-show" -t "bool" -s "true"
+        xfconf-query -c "xfce4-desktop" -p "/backdrop/screen0/monitor0/image-style" -t "int" -s "5"
         xfconf-query -c "xfce4-desktop" -p "/backdrop/screen0/monitor0/image-path" -t "string" -s "$cuckoo_os_background_file"
     fi
 }
