@@ -15,7 +15,7 @@ cuckoo_os_help()
 
 Usage: $(basename $0) [actions] [arguments]
 
-Cuckoo OS style install/uninstall script.
+Cuckoo OS theme style install/uninstall script.
 
   Actions:
 
@@ -28,8 +28,10 @@ Cuckoo OS style install/uninstall script.
 
   Arguments:
 
-    -y, --style        Set theme style (by default: ${CUCKOO_OS_STYLE_DEFAULT}). Styles: $(from_arr_to_str "$CUCKOO_OS_STYLE_LIST").
-    -m, --mode         Set style mode (by default: ${CUCKOO_OS_STYLE_MODE_DEFAULT}). Style modes: $(from_arr_to_str "$CUCKOO_OS_STYLE_MODE_LIST").
+    -y, --style        Set theme style (by default: ${CUCKOO_OS_STYLE_DEFAULT}).
+                         Theme styles: $(from_arr_to_str "$CUCKOO_OS_STYLE_LIST").
+    -m, --mode         Set style mode (by default: ${CUCKOO_OS_STYLE_MODE_DEFAULT}).
+                         Style modes: $(from_arr_to_str "$CUCKOO_OS_STYLE_MODE_LIST").
     -s, --su           Run from superuser (root), using su.
     -U, --su-user      Run from some different user, using su.
     -S, --sudo         Run using sudo.
