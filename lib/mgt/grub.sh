@@ -9,7 +9,7 @@
 
 
 #
-cucko_os_grub_theme_file_name_define()
+cuckoo_os_grub_theme_file_name_define()
 {
     local cuckoo_os_style="$1"
     local cuckoo_os_name_dist="$2"
@@ -23,7 +23,7 @@ cucko_os_grub_theme_file_name_define()
 
 
 #
-cucko_os_grub_theme_files_create()
+cuckoo_os_grub_theme_files_create()
 {
     for style in $CUCKOO_OS_STYLE_LIST
     do
@@ -33,7 +33,7 @@ cucko_os_grub_theme_files_create()
 
             cuckoo_os_args_style_$style
 
-            cat > "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/$(cucko_os_grub_theme_file_name_define "$style" "$dist_name")" << _G_R_U_B__T_H_E_M_E__F_I_L_E
+            cat > "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/$(cuckoo_os_grub_theme_file_name_define "$style" "$dist_name")" << _G_R_U_B__T_H_E_M_E__F_I_L_E
 #
 # A desktop-oriented virtual machines management system written in Shell.
 #
@@ -152,7 +152,7 @@ _G_R_U_B__T_H_E_M_E__F_I_L_E
 
 
 #
-cucko_os_grub_theme_dir_create()
+cuckoo_os_grub_theme_dir_create()
 {
     if [ ! -d "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR" ]
     then

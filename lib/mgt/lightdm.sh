@@ -9,7 +9,7 @@
 
 
 #
-cucko_os_lightdm_conf_dir_create()
+cuckoo_os_lightdm_conf_dir_create()
 {
     if [ ! -d "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR" ]
     then
@@ -22,7 +22,7 @@ cucko_os_lightdm_conf_dir_create()
 
 
 #
-cucko_os_lightdm_conf_file_create()
+cuckoo_os_lightdm_conf_file_create()
 {
         cat > "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_FILE" << _L_I_G_H_T_D_M__C_O_N_F
 # Seat defaults
@@ -77,18 +77,20 @@ _L_I_G_H_T_D_M__C_O_N_F
 
 
 #
-cucko_os_lightdm_gtk_greeter_file_name()
+cuckoo_os_lightdm_gtk_greeter_file_name()
 {
     echo "cuckoo-lightdm-gtk-greeter-${1}.conf"
 }
 
 
 #
-cucko_os_lightdm_gtk_greeter_files_create()
+cuckoo_os_lightdm_gtk_greeter_files_create()
 {
     for style in $CUCKOO_OS_STYLE_LIST
     do
-        cat > "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cucko_os_lightdm_gtk_greeter_file_name "$style")" << _L_I_G_H_T_D_M__G_T_K__G_R_E_E_T_E_R__C_O_N_F
+        cuckoo_os_style_theme_define "$style"
+
+        cat > "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cuckoo_os_lightdm_gtk_greeter_file_name "$style")" << _L_I_G_H_T_D_M__G_T_K__G_R_E_E_T_E_R__C_O_N_F
 #
 # background = Background file to use, either an image path or a color (e.g. #772953)
 # theme-name = GTK+ theme to use
@@ -110,13 +112,13 @@ cucko_os_lightdm_gtk_greeter_files_create()
 
 [greeter]
 background=${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR}background/${style}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.svg
-theme-name=cuckoo-$(cucko_os_style_theme_define "${style}")
-icon-theme-name=cuckoo-adwaita
+theme-name=${CUCKOO_OS_STYLE_THEME}
+icon-theme-name=${CUCKOO_OS_STYLE_THEME_ICON}
 font-name=Sans
 xft-antialias=true
-xft-dpi=96
-xft-hintstyle=hintfull
-xft-rgba=rgb
+xft-dpi=${CUCKOO_OS_STYLE_THEME_FONT_DPI}
+xft-hintstyle=${CUCKOO_OS_STYLE_THEME_FONT_HINT}
+xft-rgba=${CUCKOO_OS_STYLE_THEME_FONT_RGBA}
 show-indicators=~power
 show-clock=true
 clock-format=%H:%M:%S
@@ -127,7 +129,7 @@ _L_I_G_H_T_D_M__G_T_K__G_R_E_E_T_E_R__C_O_N_F
 
 
 #
-cucko_os_lightdm_gtk_greeter_file_select()
+cuckoo_os_lightdm_gtk_greeter_file_select()
 {
     if [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ] && [ ! -L "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ]
     then
@@ -142,8 +144,8 @@ cucko_os_lightdm_gtk_greeter_file_select()
         fi
     fi
 
-    if [ ! -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cucko_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" ]
+    if [ ! -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cuckoo_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" ]
     then
-        cucko_os_lightdm_gtk_greeter_files_create
+        cuckoo_os_lightdm_gtk_greeter_files_create
     fi
 }

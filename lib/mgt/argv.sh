@@ -39,7 +39,7 @@ cuckoo_os_args()
             CUCKOO_OS_ACTION="uninstall"
             shift 1
         ;;
-        --select | -s )
+        --select | -e )
             CUCKOO_OS_ACTION="select"
             shift 1
         ;;

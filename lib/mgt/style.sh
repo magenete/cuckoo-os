@@ -9,22 +9,95 @@
 
 
 # Define Cuckoo theme by style
-cucko_os_style_theme_define()
+cuckoo_os_style_theme_define()
 {
-    case "$1" in
+    local cuckoo_os_style="$1"
+
+    [ -z "$cuckoo_os_style" ] && cuckoo_os_style="$CUCKOO_OS_STYLE"
+
+    case "$cuckoo_os_style" in
         light )
-            echo "adwaita-grey"
+            CUCKOO_OS_STYLE_THEME="$CUCKOO_OS_STYLE_THEME_LIGHT"
         ;;
         gray )
-            echo "adwaita-graphene"
+            CUCKOO_OS_STYLE_THEME="$CUCKOO_OS_STYLE_THEME_GRAY"
         ;;
         dark )
-            echo "xfce-dusk-green"
+            CUCKOO_OS_STYLE_THEME="$CUCKOO_OS_STYLE_THEME_DARK"
         ;;
         * )
-            cuckoo_os_error "Invalid style '${1}'"
+            cuckoo_os_error "Invalid style '${cuckoo_os_style}'"
         ;;
     esac
+}
+
+
+# Install Cuckoo theme by style
+cuckoo_os_style_xfce_theme_install()
+{
+    if [ -f "$CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DESKTOP_XML_FILE" ] && [ ! -f "${CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DESKTOP_XML_FILE}.backup" ]
+    then
+        cp "$CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DESKTOP_XML_FILE" "${CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DESKTOP_XML_FILE}.backup"
+    fi
+
+    if [ -f "$CUCKOO_OS_SYSTEM_USER_XFCE_CONF_XSETTINGS_XML_FILE" ] && [ ! -f "${CUCKOO_OS_SYSTEM_USER_XFCE_CONF_XSETTINGS_XML_FILE}.backup" ]
+    then
+        cp "$CUCKOO_OS_SYSTEM_USER_XFCE_CONF_XSETTINGS_XML_FILE" "${CUCKOO_OS_SYSTEM_USER_XFCE_CONF_XSETTINGS_XML_FILE}.backup"
+    fi
+
+    if [ -f "$CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DISPLAYS_XML_FILE" ] && [ ! -f "${CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DISPLAYS_XML_FILE}.backup" ]
+    then
+        cp "$CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DISPLAYS_XML_FILE" "${CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DISPLAYS_XML_FILE}.backup"
+    fi
+}
+
+
+# Define Cuckoo theme by style
+cuckoo_os_style_xfce_theme_define()
+{
+    local cuckoo_os_background_file="${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR}background/${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.png"
+
+    cuckoo_os_style_theme_define
+
+    xfconf-query -c "xsettings" -p "/Xft/HintStyle" -t "string" -s "$CUCKOO_OS_STYLE_THEME_FONT_HINT"
+    xfconf-query -c "xsettings" -p "/Xft/RGBA" -t "string" -s "$CUCKOO_OS_STYLE_THEME_FONT_RGBA"
+    xfconf-query -c "xsettings" -p "/Xft/DPI" -t "int" -s "$CUCKOO_OS_STYLE_THEME_FONT_DPI"
+
+    if [ -d "${CUCKOO_OS_SYSTEM_THEMES_DIR}${CUCKOO_OS_STYLE_THEME}" ]
+    then
+        xfconf-query -c "xsettings" -p "/Net/ThemeName" -t "string" -s "$CUCKOO_OS_STYLE_THEME"
+    fi
+    if [ -d "${CUCKOO_OS_SYSTEM_ICONS_DIR}${CUCKOO_OS_STYLE_THEME_ICON}" ]
+    then
+        xfconf-query -c "xsettings" -p "/Net/IconThemeName" -t "string" -s "$CUCKOO_OS_STYLE_THEME_ICON"
+        xfconf-query -c "xsettings" -p "/Gtk/CursorThemeName" -t "string" -s "$CUCKOO_OS_STYLE_THEME_CURSOR"
+    fi
+
+    if [ -f "$cuckoo_os_background_file" ]
+    then
+        xfconf-query -c "xfce4-desktop" -p "/backdrop/screen0/monitor0/image-show" -t "bool" -s "true"
+        xfconf-query -c "xfce4-desktop" -p "/backdrop/screen0/monitor0/image-path" -t "string" -s "$cuckoo_os_background_file"
+    fi
+}
+
+
+# Uninstall Cuckoo theme by style
+cuckoo_os_style_xfce_theme_uninstall()
+{
+    if [ -f "${CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DESKTOP_XML_FILE}.backup" ]
+    then
+        mv -f "${CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DESKTOP_XML_FILE}.backup" "$CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DESKTOP_XML_FILE"
+    fi
+
+    if [ -f "${CUCKOO_OS_SYSTEM_USER_XFCE_CONF_XSETTINGS_XML_FILE}.backup" ]
+    then
+        mv -f "${CUCKOO_OS_SYSTEM_USER_XFCE_CONF_XSETTINGS_XML_FILE}.backup" "$CUCKOO_OS_SYSTEM_USER_XFCE_CONF_XSETTINGS_XML_FILE"
+    fi
+
+    if [ -f "${CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DISPLAYS_XML_FILE}.backup" ]
+    then
+        mv -f "${CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DISPLAYS_XML_FILE}.backup" "$CUCKOO_OS_SYSTEM_USER_XFCE_CONF_DISPLAYS_XML_FILE"
+    fi
 }
 
 
