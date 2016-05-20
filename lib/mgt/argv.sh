@@ -11,8 +11,8 @@
 # Options definition
 cuckoo_os_args()
 {
-    ARGS_SHORT="iuey:m:sU:SVh"
-    ARGS_LONG="install,uninstall,select,style:,mode:,su,su-user:,sudo,version,help"
+    ARGS_SHORT="iuey:m:sU:SVD:d:h"
+    ARGS_LONG="install,uninstall,select,style:,mode:,su,su-user:,sudo,screen-size:,font-dpi:,version,help"
     OPTS="$(getopt -o "${ARGS_SHORT}" -l "${ARGS_LONG}" -a -- "$@" 2>/dev/null)"
     if [ $? -gt 0 ]
     then
@@ -85,6 +85,24 @@ cuckoo_os_args()
         --sudo | -S )
             CUCKOO_OS_SUPERUSER_COMMAND="sudo"
             shift 1
+        ;;
+        --screen-size | -D )
+            if [ -z "$(valid_value_in_arr "$CUCKOO_OS_SYSTEM_SCREEN_SIZE_LIST" "$2")" ]
+            then
+                cuckoo_os_error "Cuckoo OS screen size '${2}' is not supported"
+            else
+                CUCKOO_OS_SYSTEM_SCREEN_SIZE="$2"
+            fi
+            shift 2
+        ;;
+        --font-dpi | -d )
+            if [ $2 -ge $CUCKOO_OS_STYLE_THEME_FONT_DPI_MIN ] && [ $2 -le $CUCKOO_OS_STYLE_THEME_FONT_DPI_MAX ]
+            then
+                CUCKOO_OS_STYLE_THEME_FONT_DPI=$2
+            else
+                cuckoo_os_error "Invalid number of font DPI '${2}'"
+            fi
+            shift 2
         ;;
         * )
             cuckoo_os_error "Invalid option(s)"
