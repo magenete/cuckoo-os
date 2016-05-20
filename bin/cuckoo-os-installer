@@ -109,6 +109,8 @@ cuckoo_os_cuckoo_install()
 {
     chmod $CUCKOO_OS_VERBOSE 0700 "${HOME}/${CUCKOO_OS_DIR}"
     chmod $CUCKOO_OS_VERBOSE 0700 "${HOME}/${CUCKOO_OS_DIR}"*
+    chmod $CUCKOO_OS_VERBOSE 0600 "${HOME}/${CUCKOO_OS_DIR}README.md"
+    chmod $CUCKOO_OS_VERBOSE 0600 "${HOME}/${CUCKOO_OS_DIR}LICENSE"
 
     # Bin
     chmod $CUCKOO_OS_VERBOSE 0700 "${HOME}/${CUCKOO_OS_BIN_DIR}"*
