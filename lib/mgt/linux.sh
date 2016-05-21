@@ -38,14 +38,6 @@ cuckoo_os_linux_uninstall_user()
 
 
 #
-cuckoo_os_linux_uninstall_all()
-{
-    cuckoo_os_linux_uninstall_system
-    cuckoo_os_linux_uninstall_user
-}
-
-
-#
 cuckoo_os_linux_uninstall()
 {
     rm -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}cuckoo"*
@@ -96,14 +88,6 @@ cuckoo_os_linux_select_system()
 cuckoo_os_linux_select_user()
 {
     cuckoo_os_linux_install_user
-}
-
-
-#
-cuckoo_os_linux_select_all()
-{
-    cuckoo_os_linux_select_system
-    cuckoo_os_linux_select_user
 }
 
 
@@ -176,14 +160,6 @@ cuckoo_os_linux_install_user()
 {
     cuckoo_os_style_xfce_theme_install
     cuckoo_os_style_xfce_theme_define
-}
-
-
-# Install all
-cuckoo_os_linux_install_all()
-{
-    cuckoo_os_linux_install_system
-    cuckoo_os_linux_install_user
 }
 
 
