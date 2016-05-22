@@ -33,7 +33,7 @@ cuckoo_os_grub_theme_files_create()
 
             cuckoo_os_args_style_$style
 
-            cat > "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/$(cuckoo_os_grub_theme_file_name_define "$style" "$dist_name")" << _G_R_U_B__T_H_E_M_E__F_I_L_E
+            cat > "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}${CUCKOO_OS}/$(cuckoo_os_grub_theme_file_name_define "$style" "$dist_name")" << _G_R_U_B__T_H_E_M_E__F_I_L_E
 #
 # A desktop-oriented virtual machines management system written in Shell.
 #
@@ -160,5 +160,5 @@ cuckoo_os_grub_theme_dir_create()
         mkdir "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR"
     fi
 
-    cp -r "$CUCKOO_OS_ETC_GRUB_DIR" "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo"
+    cp -r "$CUCKOO_OS_ETC_GRUB_DIR" "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}${CUCKOO_OS}"
 }

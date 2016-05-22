@@ -11,9 +11,9 @@
 
 CUCKOO_OS_DIR="${CUCKOO_OS_DIR:=$(cd "$(dirname "$0")/.." && pwd -P)}/"
 
+CUCKOO_OS="cuckoo-os"
 CUCKOO_OS_ACTION=""
 CUCKOO_OS_NAME=""
-
 CUCKOO_OS_STYLE=""
 CUCKOO_OS_STYLE_THEME=""
 CUCKOO_OS_STYLE_THEME_ICON=""
@@ -23,7 +23,6 @@ CUCKOO_OS_STYLE_FONT_COLOR=""
 CUCKOO_OS_STYLE_FONT_COLOR_GRUB=""
 CUCKOO_OS_STYLE_BACKGROUND_COLOR=""
 CUCKOO_OS_STYLE_MODE=""
-
 CUCKOO_OS_NAME_DIST=""
 CUCKOO_OS_NAME_DIST_COLOR=""
 CUCKOO_OS_SUPERUSER_COMMAND=""
@@ -48,12 +47,12 @@ then
 
     if [ "$CUCKOO_OS_SUPERUSER_COMMAND" = "sudo" ]
     then
-        $CUCKOO_OS_SUPERUSER_COMMAND sh -c "\"${CUCKOO_OS_DIR}bin/cuckoo-os\" \"$(cuckoo_os_args_without_superuser "$@")\""
+        $CUCKOO_OS_SUPERUSER_COMMAND sh -c "\"${CUCKOO_OS_BIN_DIR}${CUCKOO_OS}\" \"$(cuckoo_os_args_without_superuser "$@")\""
     elif [ -z "$CUCKOO_OS_SUPERUSER_COMMAND" ]
     then
         cuckoo_os_${CUCKOO_OS_NAME}_${CUCKOO_OS_ACTION}
     else
-        $CUCKOO_OS_SUPERUSER_COMMAND --command "\"${CUCKOO_OS_DIR}bin/cuckoo-os\" \"$(cuckoo_os_args_without_superuser "$@")\""
+        $CUCKOO_OS_SUPERUSER_COMMAND --command "\"${CUCKOO_OS_BIN_DIR}${CUCKOO_OS}\" \"$(cuckoo_os_args_without_superuser "$@")\""
     fi
 else
     cuckoo_os_error "Invalid ENV of current user '$USER'"

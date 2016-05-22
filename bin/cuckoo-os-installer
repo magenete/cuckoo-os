@@ -9,19 +9,20 @@
 #
 
 
+CUCKOO_OS="cuckoo-os"
 CUCKOO_OS_GIT_BRANCH="master"
-CUCKOO_OS_GIT_URL="https://github.com/magenete/cuckoo-os/archive/${CUCKOO_OS_GIT_BRANCH}.tar.gz"
+CUCKOO_OS_GIT_URL="https://github.com/magenete/${CUCKOO_OS}/archive/${CUCKOO_OS_GIT_BRANCH}.tar.gz"
 
 CUCKOO_OS_ACTION=""
 CUCKOO_OS_ACTION_DEFAULT="install"
 CUCKOO_INSTALLER_DIR=".cuckoo/"
-CUCKOO_OS_BRANCH_DIR="${CUCKOO_INSTALLER_DIR}cuckoo-os-${CUCKOO_OS_GIT_BRANCH}/"
+CUCKOO_OS_BRANCH_DIR="${CUCKOO_INSTALLER_DIR}${CUCKOO_OS}-${CUCKOO_OS_GIT_BRANCH}/"
 CUCKOO_OS_DIR="$CUCKOO_OS_BRANCH_DIR"
 CUCKOO_OS_LIB_DIR="${CUCKOO_OS_DIR}lib/"
 CUCKOO_OS_ETC_DIR="${CUCKOO_OS_DIR}etc/"
 CUCKOO_OS_ETC_VERSION_FILE="${CUCKOO_OS_ETC_DIR}VERSION"
 CUCKOO_OS_BIN_DIR="${CUCKOO_OS_DIR}bin/"
-CUCKOO_OS_BIN_FILE="${CUCKOO_OS_BIN_DIR}cuckoo-os"
+CUCKOO_OS_BIN_FILE="${CUCKOO_OS_BIN_DIR}${CUCKOO_OS}"
 CUCKOO_OS_VERBOSE=""
 
 HOME_SHELL_PROFILE_FILES=".bash_profile .bashrc .mkshrc .profile .zlogin .zshrc"
@@ -131,7 +132,7 @@ cuckoo_os_cuckoo_install()
 # Add Cuckoo OS bin path in PATH
 cuckoo_os_add_bin_path()
 {
-    if [ "$CUCKOO_OS_VERBOSE" != "" ]
+    if [ ! -z "$CUCKOO_OS_VERBOSE" ]
     then
         echo ""
         echo "Cuckoo OS bin path was added in PATH in the following file(s):"
@@ -144,11 +145,11 @@ cuckoo_os_add_bin_path()
             echo "" >> "${HOME}/${shell_profile_file}"
             echo "export PATH=\"\${PATH}:\${HOME}/${CUCKOO_OS_BIN_DIR}\"  # Add Cuckoo OS to PATH for scripting" >> "${HOME}/${shell_profile_file}"
 
-            [ "$CUCKOO_OS_VERBOSE" != "" ] && echo "    '${HOME}/${shell_profile_file}'"
+            [ ! -z "$CUCKOO_OS_VERBOSE" ] && echo "    '${HOME}/${shell_profile_file}'"
         fi
     done
 
-    [ "$CUCKOO_OS_VERBOSE" != "" ] && echo ""
+    [ ! -z "$CUCKOO_OS_VERBOSE" ] && echo ""
 
     # Export new PATH
     export PATH="${PATH}:${HOME}/${CUCKOO_OS_BIN_DIR}"
@@ -261,7 +262,7 @@ fi
 # Launch
 if [ "$(whoami)" = "$USER" ] && [ "$(basename $HOME)" = "$USER" ]
 then
-    [ -z "$CUCKOO_OS_ACTION" ] && CUCKOO_OS_ACTION="$CUCKOO_OS_ACTION_DEFAULT"
+    CUCKOO_OS_ACTION="${CUCKOO_OS_ACTION:=$CUCKOO_OS_ACTION_DEFAULT}"
 
     case "$CUCKOO_OS_ACTION" in
         install )

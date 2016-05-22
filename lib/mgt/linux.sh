@@ -40,19 +40,19 @@ cuckoo_os_linux_uninstall_user()
 #  Uninstall Cuckoo on Linux in all
 cuckoo_os_linux_uninstall()
 {
-    rm -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}cuckoo"*
+    rm -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}${CUCKOO_OS}"*
     [ -L "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ] && rm -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
 
     rm -rf "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR"
-    rm -rf "${CUCKOO_OS_SYSTEM_THEMES_DIR}cuckoo"*
-    rm -rf "${CUCKOO_OS_SYSTEM_ICONS_DIR}cuckoo"*
+    rm -rf "${CUCKOO_OS_SYSTEM_THEMES_DIR}${CUCKOO_OS}"*
+    rm -rf "${CUCKOO_OS_SYSTEM_ICONS_DIR}${CUCKOO_OS}"*
 
     rm -rf "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR"
-    rm -f "${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CONF_DIR}cuckoo"*
+    rm -f "${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CONF_DIR}${CUCKOO_OS}"*
 
     if [ -d "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR" ]
     then
-        rm -rf "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo"*
+        rm -rf "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}${CUCKOO_OS}"*
         [ -z "$(ls "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR")" ] && rm -rf "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR"
     fi
 
@@ -74,10 +74,10 @@ cuckoo_os_linux_select_system()
         ln -sf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cuckoo_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
 
         # GRUB
-        export GRUB_BACKGROUND="${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/background/${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.png"
-        export GRUB_THEME="${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/$(cuckoo_os_grub_theme_file_name_define)"
+        export GRUB_BACKGROUND="${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}${CUCKOO_OS}/background/${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.png"
+        export GRUB_THEME="${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}${CUCKOO_OS}/$(cuckoo_os_grub_theme_file_name_define)"
         export GRUB_GFXMODE="${CUCKOO_OS_SYSTEM_GRUB_SCREEN_SIZE}x24"
-        export GRUB_GFXPAYLOAD_LINUX="keep"
+#        export GRUB_GFXPAYLOAD_LINUX="keep"
 
         grub-mkconfig -o "$CUCKOO_OS_SYSTEM_GRUB_CONFIG_FILE"
     fi
@@ -124,7 +124,7 @@ cuckoo_os_linux_install_system()
     # XFce themes
     for xfce_theme in $(ls "$CUCKOO_OS_ETC_XFCE_THEME_DIR")
     do
-        cp -r "${CUCKOO_OS_ETC_XFCE_THEME_DIR}${xfce_theme}" "${CUCKOO_OS_SYSTEM_THEMES_DIR}cuckoo-${xfce_theme}"
+        cp -r "${CUCKOO_OS_ETC_XFCE_THEME_DIR}${xfce_theme}" "${CUCKOO_OS_SYSTEM_THEMES_DIR}${CUCKOO_OS}-${xfce_theme}"
         if [ $? -gt 0 ]
         then
             cuckoo_os_error "Could not copy theme '${CUCKOO_OS_ETC_XFCE_THEME_DIR}${xfce_theme}'"
@@ -134,7 +134,7 @@ cuckoo_os_linux_install_system()
     # Xfce icons
     for xfce_icon in $(ls "$CUCKOO_OS_ETC_XFCE_ICON_DIR")
     do
-        cp -r "${CUCKOO_OS_ETC_XFCE_ICON_DIR}${xfce_icon}" "${CUCKOO_OS_SYSTEM_ICONS_DIR}cuckoo-${xfce_icon}"
+        cp -r "${CUCKOO_OS_ETC_XFCE_ICON_DIR}${xfce_icon}" "${CUCKOO_OS_SYSTEM_ICONS_DIR}${CUCKOO_OS}-${xfce_icon}"
         if [ $? -gt 0 ]
         then
             cuckoo_os_error "Could not copy theme '${CUCKOO_OS_ETC_XFCE_ICON_DIR}${xfce_icon}'"

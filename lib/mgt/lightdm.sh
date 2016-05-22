@@ -82,7 +82,7 @@ _L_I_G_H_T_D_M__C_O_N_F
 # Generate lightdm_gtk_greeter_*.conf
 cuckoo_os_lightdm_gtk_greeter_file_name()
 {
-    echo "cuckoo-lightdm-gtk-greeter-${1}.conf"
+    echo "${CUCKOO_OS}-lightdm-gtk-greeter-${1}.conf"
 }
 
 
@@ -131,7 +131,7 @@ _L_I_G_H_T_D_M__G_T_K__G_R_E_E_T_E_R__C_O_N_F
 }
 
 
-#
+# Select file lightdm-gtk-greeter by style
 cuckoo_os_lightdm_gtk_greeter_file_select()
 {
     if [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ] && [ ! -L "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ]
