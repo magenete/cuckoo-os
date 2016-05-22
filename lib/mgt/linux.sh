@@ -40,7 +40,7 @@ cuckoo_os_linux_uninstall_user()
 #  Uninstall Cuckoo on Linux in all
 cuckoo_os_linux_uninstall()
 {
-    rm -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}${CUCKOO_OS}"*
+    rm -rf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}${CUCKOO_OS}"
     [ -L "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ] && rm -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
 
     rm -rf "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_DIR"
@@ -65,13 +65,8 @@ cuckoo_os_linux_select_system()
 {
     if [ ! -z "$CUCKOO_OS_STYLE" ]
     then
-        if [ ! -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cuckoo_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" ]
-        then
-            cuckoo_os_lightdm_gtk_greeter_files_create
-        fi
-
         # LightDM
-        ln -sf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cuckoo_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
+        ln -sf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_CUCKOO_OS_GREETER_DIR}${CUCKOO_OS_STYLE}.conf" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
 
         # GRUB
         export GRUB_BACKGROUND="${CUCKOO_OS_SYSTEM_GRUB_THEME_CUCKOO_OS_BACKGROUND_DIR}${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.png"
@@ -131,7 +126,7 @@ cuckoo_os_linux_install_system()
         fi
     done
 
-    # Xfce icons
+    # Xfce4 icons
     for xfce4_icon in $(ls "$CUCKOO_OS_ETC_XFCE4_ICON_DIR")
     do
         cp -r "${CUCKOO_OS_ETC_XFCE4_ICON_DIR}${xfce4_icon}" "${CUCKOO_OS_SYSTEM_ICONS_DIR}${CUCKOO_OS}-${xfce4_icon}"
