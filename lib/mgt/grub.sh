@@ -87,6 +87,7 @@ terminal-font: "Fixed Regular 10"
 }
 
 
+# View timeout
 + label
 {
     left = 49%
@@ -96,7 +97,7 @@ terminal-font: "Fixed Regular 10"
 
     id = "__timeout__"
 
-    color = "lightgrey"
+    color = "${CUCKOO_OS_STYLE_FONT_COLOR_GRUB}"
 }
 
 

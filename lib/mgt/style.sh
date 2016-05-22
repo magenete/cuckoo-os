@@ -113,6 +113,7 @@ cuckoo_os_style_xfce_theme_uninstall()
 cuckoo_os_args_style_light()
 {
     CUCKOO_OS_STYLE_FONT_COLOR="#646464"
+    CUCKOO_OS_STYLE_FONT_COLOR_GRUB="grey"
     CUCKOO_OS_STYLE_BACKGROUND_COLOR="#dbdbdb"
 
     case "${CUCKOO_OS_NAME_DIST#/}" in
@@ -152,6 +153,7 @@ cuckoo_os_args_style_light()
 cuckoo_os_args_style_gray()
 {
     CUCKOO_OS_STYLE_FONT_COLOR="#bfbfbf"
+    CUCKOO_OS_STYLE_FONT_COLOR_GRUB="lightgrey"
     CUCKOO_OS_STYLE_BACKGROUND_COLOR="#484848"
 
     case "${CUCKOO_OS_NAME_DIST#/}" in
@@ -191,6 +193,7 @@ cuckoo_os_args_style_gray()
 cuckoo_os_args_style_dark()
 {
     CUCKOO_OS_STYLE_FONT_COLOR="#646464"
+    CUCKOO_OS_STYLE_FONT_COLOR_GRUB="grey"
     CUCKOO_OS_STYLE_BACKGROUND_COLOR="#161616"
 
     case "${CUCKOO_OS_NAME_DIST#/}" in
