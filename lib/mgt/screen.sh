@@ -107,7 +107,7 @@ cuckoo_os_screen_size_add()
 
             screen_size_args="$(echo ${line#Modeline \"${CUCKOO_OS_SYSTEM_SCREEN_SIZE}_${CUCKOO_OS_SYSTEM_SCREEN_HZ}.00\"})"
 
-            xrandr --newmode "$CUCKOO_OS_SYSTEM_SCREEN_SIZE" screen_size_args
+            xrandr --newmode "$CUCKOO_OS_SYSTEM_SCREEN_SIZE" $screen_size_args
             xrandr --addmode "$(cuckoo_os_screen_define_dev)" "$CUCKOO_OS_SYSTEM_SCREEN_SIZE"
         done
     }
@@ -132,7 +132,7 @@ cuckoo_os_screen_size_value_check()
     local x="${1%%x*}"
     local y="${1#${x}x}"
 
-    if [ ! -z "$x" ] && [ ! -z "$y" ] && [ $x -ge $CUCKOO_OS_SYSTEM_SCREEN_SIZE_X_MIN ] && [ $x -le $CUCKOO_OS_SYSTEM_SCREEN_SIZE_X_MAX ] &&[ $y -ge $CUCKOO_OS_SYSTEM_SCREEN_SIZE_Y_MIN ] && [ $y -le $CUCKOO_OS_SYSTEM_SCREEN_SIZE_Y_MAX ]
+    if [ ! -z "$x" ] && [ ! -z "$y" ] && [ $x -ge $CUCKOO_OS_SYSTEM_SCREEN_SIZE_X_MIN ] && [ $x -le $CUCKOO_OS_SYSTEM_SCREEN_SIZE_X_MAX ] && [ $y -ge $CUCKOO_OS_SYSTEM_SCREEN_SIZE_Y_MIN ] && [ $y -le $CUCKOO_OS_SYSTEM_SCREEN_SIZE_Y_MAX ]
     then
         echo "$1"
     else
