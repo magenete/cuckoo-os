@@ -11,6 +11,7 @@
 # Uninstall Cuckoo on Linux for system
 cuckoo_os_linux_uninstall_system()
 {
+    # Files
     if [ -e "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" ] && [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" ]
     then
         mv -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
@@ -26,20 +27,7 @@ cuckoo_os_linux_uninstall_system()
         fi
     fi
 
-    grub-mkconfig -o "$CUCKOO_OS_SYSTEM_GRUB_CONFIG_FILE"
-}
-
-
-# Uninstall Cuckoo on Linux for user
-cuckoo_os_linux_uninstall_user()
-{
-    cuckoo_os_style_xfce4_theme_uninstall
-}
-
-
-#  Uninstall Cuckoo on Linux in all
-cuckoo_os_linux_uninstall()
-{
+    # Directories
     rm -rf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}${CUCKOO_OS}"
     [ -L "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ] && rm -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
 
@@ -56,6 +44,21 @@ cuckoo_os_linux_uninstall()
         [ -z "$(ls "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR")" ] && rm -rf "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR"
     fi
 
+    # Update GRUB
+    grub-mkconfig -o "$CUCKOO_OS_SYSTEM_GRUB_CONFIG_FILE"
+}
+
+
+# Uninstall Cuckoo on Linux for user
+cuckoo_os_linux_uninstall_user()
+{
+    cuckoo_os_style_xfce4_theme_uninstall
+}
+
+
+#  Uninstall Cuckoo on Linux in all
+cuckoo_os_linux_uninstall()
+{
     cuckoo_os_linux_uninstall_$CUCKOO_OS_STYLE_MODE
 }
 
@@ -139,12 +142,10 @@ cuckoo_os_linux_install_system()
     cuckoo_os_grub_theme_dir_create
     cuckoo_os_grub_theme_files_create
 
-    cuckoo_os_lightdm_gtk_greeter_files_create
-
-    cuckoo_os_lightdm_gtk_greeter_file_select
-
     cuckoo_os_lightdm_conf_dir_create
     cuckoo_os_lightdm_conf_file_create
+    cuckoo_os_lightdm_gtk_greeter_files_create
+    cuckoo_os_lightdm_gtk_greeter_file_select
 
     cuckoo_os_linux_select_system
 }
