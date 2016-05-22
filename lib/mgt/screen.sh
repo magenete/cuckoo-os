@@ -98,7 +98,7 @@ cuckoo_os_screen_size_add()
 
     local screen_size_args=""
 
-    gtf "$screen_size_x" "$screen_size_y" "$CUCKOO_OS_SYSTEM_SCREEN_HZ" 2> /dev/null | {
+    gtf "$screen_size_x" "$screen_size_y" "$CUCKOO_OS_SYSTEM_SCREEN_HZ" -x 2> /dev/null | {
         while IFS= read -r line
         do
             line="$(echo $line)"
