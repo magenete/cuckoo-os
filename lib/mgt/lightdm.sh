@@ -11,23 +11,23 @@
 # Create lightdm.conf.d for Cuckoo
 cuckoo_os_lightdm_conf_dir_create()
 {
-    if [ ! -d "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR" ]
+    if [ ! -d "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_OS_DIR" ]
     then
-        mkdir "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR"
+        mkdir "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_OS_DIR"
     fi
 
-    cp "${CUCKOO_OS_BIN_DIR}screen-size-hd.sh" "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR"
-    chmod 0755 "${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR}screen-size-hd.sh"
+    cp "${CUCKOO_OS_BIN_DIR}screen-size-hd.sh" "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_OS_DIR"
+    chmod 0755 "${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_OS_DIR}screen-size-hd.sh"
 
-    cp "${CUCKOO_OS_LIB_DIR}mgt/screen.sh" "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR"
-    chmod 0644 "${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR}screen.sh"
+    cp "${CUCKOO_OS_LIB_DIR}mgt/screen.sh" "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_OS_DIR"
+    chmod 0644 "${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_OS_DIR}screen.sh"
 }
 
 
 # Create lightdm.conf for Cuckoo
 cuckoo_os_lightdm_conf_file_create()
 {
-    cat > "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_FILE" << _L_I_G_H_T_D_M__C_O_N_F
+    cat > "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_OS_FILE" << _L_I_G_H_T_D_M__C_O_N_F
 # Seat defaults
 #
 # type = Seat type (xlocal, xremote)
@@ -74,7 +74,7 @@ cuckoo_os_lightdm_conf_file_create()
 
 
 [SeatDefaults]
-greeter-setup-script=${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_DIR}screen-size-hd.sh
+greeter-setup-script=${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_OS_DIR}screen-size-hd.sh
 _L_I_G_H_T_D_M__C_O_N_F
 }
 
