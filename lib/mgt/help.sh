@@ -22,6 +22,8 @@ Cuckoo OS theme style install/uninstall script.
     -i, --install      Install Cuckoo OS (by default).
     -u, --uninstall    Uninstall Cuckoo OS.
     -e, --select       Select style and mode.
+    -D, --screen-size  Define screen size (min: ${CUCKOO_OS_SYSTEM_SCREEN_SIZE_X_MIN}x${CUCKOO_OS_SYSTEM_SCREEN_SIZE_Y_MIN}, max: ${CUCKOO_OS_SYSTEM_SCREEN_SIZE_X_MAX}x${CUCKOO_OS_SYSTEM_SCREEN_SIZE_Y_MAX}).
+                         OS screen sizes: $(from_arr_to_str "$(cuckoo_os_screen_size_list)").
 
     -V, --version      Print the current version.
     -h, --help         Show this message.
@@ -32,13 +34,11 @@ Cuckoo OS theme style install/uninstall script.
                          Theme styles: $(from_arr_to_str "$CUCKOO_OS_STYLE_LIST").
     -m, --mode         Set style mode (by default: ${CUCKOO_OS_STYLE_MODE_DEFAULT}).
                          Style modes: $(from_arr_to_str "$CUCKOO_OS_STYLE_MODE_LIST").
+    -d, --font-dpi     Set font DPI (by default: ${CUCKOO_OS_STYLE_THEME_FONT_DPI_DEFAULT}, min: ${CUCKOO_OS_STYLE_THEME_FONT_DPI_MIN}, max: ${CUCKOO_OS_STYLE_THEME_FONT_DPI_MAX}).
+
     -s, --su           Run from superuser (root), using su.
     -U, --su-user      Run from some different user, using su.
     -S, --sudo         Run using sudo.
-
-    -D, --screen-size  Set screen size (by default: ${CUCKOO_OS_SYSTEM_SCREEN_SIZE_DEFAULT}).
-                         OS screen sizes: $(from_arr_to_str "$CUCKOO_OS_SYSTEM_SCREEN_SIZE_LIST").
-    -d, --font-dpi     Set font DPI (by default: ${CUCKOO_OS_STYLE_THEME_FONT_DPI_DEFAULT}, min: ${CUCKOO_OS_STYLE_THEME_FONT_DPI_MIN}, max: ${CUCKOO_OS_STYLE_THEME_FONT_DPI_MAX}).
 
 _H_E_L_P
 }

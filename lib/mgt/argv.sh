@@ -24,7 +24,7 @@ cuckoo_os_args()
     # Options parsing
     while [ $# -gt 0 ]
     do
-        case $1 in
+        case "$1" in
         -- )
             shift 1
         ;;
@@ -42,6 +42,17 @@ cuckoo_os_args()
         --select | -e )
             CUCKOO_OS_ACTION="select"
             shift 1
+        ;;
+        --screen-size | -D )
+            if [ -z "$(cuckoo_os_screen_size_value_check "$2")" ]
+            then
+                cuckoo_os_error "Invalid value '${2}' for screen size"
+            else
+                CUCKOO_OS_SYSTEM_SCREEN_SIZE="$2"
+
+                cuckoo_os_screen_size_define
+                exit $?
+            fi
         ;;
         --version | -V )
             echo "Cuckoo OS version: $(cat "$CUCKOO_OS_ETC_VERSION_FILE")"
@@ -86,15 +97,6 @@ cuckoo_os_args()
             CUCKOO_OS_SUPERUSER_COMMAND="sudo"
             shift 1
         ;;
-        --screen-size | -D )
-            if [ -z "$(valid_value_in_arr "$CUCKOO_OS_SYSTEM_SCREEN_SIZE_LIST" "$2")" ]
-            then
-                cuckoo_os_error "Cuckoo OS screen size '${2}' is not supported"
-            else
-                CUCKOO_OS_SYSTEM_SCREEN_SIZE="$2"
-            fi
-            shift 2
-        ;;
         --font-dpi | -d )
             if [ $2 -ge $CUCKOO_OS_STYLE_THEME_FONT_DPI_MIN ] && [ $2 -le $CUCKOO_OS_STYLE_THEME_FONT_DPI_MAX ]
             then
@@ -112,7 +114,7 @@ cuckoo_os_args()
 }
 
 
-#
+# Cut superuser arguments
 cuckoo_os_args_without_superuser()
 {
     local cuckoo_os_superuser_arg=""

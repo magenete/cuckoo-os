@@ -8,7 +8,7 @@
 #
 
 
-#
+# Uninstall Cuckoo on Linux for system
 cuckoo_os_linux_uninstall_system()
 {
     if [ -e "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" ] && [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" ]
@@ -30,14 +30,14 @@ cuckoo_os_linux_uninstall_system()
 }
 
 
-#
+# Uninstall Cuckoo on Linux for user
 cuckoo_os_linux_uninstall_user()
 {
     cuckoo_os_style_xfce_theme_uninstall
 }
 
 
-#
+#  Uninstall Cuckoo on Linux in all
 cuckoo_os_linux_uninstall()
 {
     rm -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}cuckoo"*

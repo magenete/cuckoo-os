@@ -114,6 +114,7 @@ cuckoo_os_cuckoo_install()
 
     # Bin
     chmod $CUCKOO_OS_VERBOSE 0700 "${HOME}/${CUCKOO_OS_BIN_DIR}"*
+    chmod $CUCKOO_OS_VERBOSE 0600 "${HOME}/${CUCKOO_OS_BIN_DIR}"*.sh
     chmod $CUCKOO_OS_VERBOSE 0600 "${HOME}/${CUCKOO_OS_BIN_DIR}"*.bat
 
     # Etc
