@@ -27,7 +27,7 @@ cuckoo_os_grub_theme_files_create()
 {
     for style in $CUCKOO_OS_STYLE_LIST
     do
-        for dist_name in $(ls "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}cuckoo/background/${style}/linux/"*.png) ""
+        for dist_name in $(ls "${CUCKOO_OS_SYSTEM_GRUB_THEME_CUCKOO_OS_BACKGROUND_DIR}${style}/linux/"*.png) ""
         do
             [ ! -z "$dist_name" ] && dist_name="/$(basename "$dist_name" .png)"
 

@@ -9,6 +9,7 @@
 #
 
 
+CUCKOO_OS="cuckoo-os"
 CUCKOO_OS_ACTION_DEFAULT="install"
 CUCKOO_OS_STYLE_LIST="light gray dark"
 CUCKOO_OS_STYLE_DEFAULT="gray"

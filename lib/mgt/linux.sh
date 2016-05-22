@@ -33,7 +33,7 @@ cuckoo_os_linux_uninstall_system()
 # Uninstall Cuckoo on Linux for user
 cuckoo_os_linux_uninstall_user()
 {
-    cuckoo_os_style_xfce_theme_uninstall
+    cuckoo_os_style_xfce4_theme_uninstall
 }
 
 
@@ -43,7 +43,7 @@ cuckoo_os_linux_uninstall()
     rm -f "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}${CUCKOO_OS}"*
     [ -L "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ] && rm -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
 
-    rm -rf "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR"
+    rm -rf "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_DIR"
     rm -rf "${CUCKOO_OS_SYSTEM_THEMES_DIR}${CUCKOO_OS}"*
     rm -rf "${CUCKOO_OS_SYSTEM_ICONS_DIR}${CUCKOO_OS}"*
 
@@ -74,7 +74,7 @@ cuckoo_os_linux_select_system()
         ln -sf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}$(cuckoo_os_lightdm_gtk_greeter_file_name "$CUCKOO_OS_STYLE")" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
 
         # GRUB
-        export GRUB_BACKGROUND="${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}${CUCKOO_OS}/background/${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.png"
+        export GRUB_BACKGROUND="${CUCKOO_OS_SYSTEM_GRUB_THEME_CUCKOO_OS_BACKGROUND_DIR}${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.png"
         export GRUB_THEME="${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}${CUCKOO_OS}/$(cuckoo_os_grub_theme_file_name_define)"
         export GRUB_GFXMODE="${CUCKOO_OS_SYSTEM_GRUB_SCREEN_SIZE}x24"
 #        export GRUB_GFXPAYLOAD_LINUX="keep"
@@ -101,43 +101,43 @@ cuckoo_os_linux_select()
 # Install and set only for system
 cuckoo_os_linux_install_system()
 {
-    if [ -e "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR" ] && [ -d "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR" ]
+    if [ -e "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_DIR" ] && [ -d "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_DIR" ]
     then
-        cuckoo_os_message "WARNING: Directory '${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR}' already exists"
+        cuckoo_os_message "WARNING: Directory '${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_DIR}' already exists"
     else
-        mkdir "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR"
+        mkdir "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_DIR"
         if [ $? -gt 0 ]
         then
-            cuckoo_os_error "Could not create directory '$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR'"
+            cuckoo_os_error "Could not create directory '$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_DIR'"
         fi
     fi
 
     # Cuckoo OS backgrounds
-    cp -r "$CUCKOO_OS_ETC_BACKGROUND_DIR" "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR"
+    cp -r "$CUCKOO_OS_ETC_BACKGROUND_DIR" "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_DIR"
     if [ $? -gt 0 ]
     then
-        cuckoo_os_error "Could not copy from '$CUCKOO_OS_ETC_BACKGROUND_DIR' to '$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR'"
+        cuckoo_os_error "Could not copy from '$CUCKOO_OS_ETC_BACKGROUND_DIR' to '$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_DIR'"
     fi
-    chown -R root.root "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR"
-    chmod 0755 "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR"*
+    chown -R root.root "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_DIR"
+    chmod 0755 "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_DIR"*
 
-    # XFce themes
-    for xfce_theme in $(ls "$CUCKOO_OS_ETC_XFCE_THEME_DIR")
+    # XFce4 themes
+    for xfce4_theme in $(ls "$CUCKOO_OS_ETC_XFCE4_THEME_DIR")
     do
-        cp -r "${CUCKOO_OS_ETC_XFCE_THEME_DIR}${xfce_theme}" "${CUCKOO_OS_SYSTEM_THEMES_DIR}${CUCKOO_OS}-${xfce_theme}"
+        cp -r "${CUCKOO_OS_ETC_XFCE4_THEME_DIR}${xfce4_theme}" "${CUCKOO_OS_SYSTEM_THEMES_DIR}${CUCKOO_OS}-${xfce4_theme}"
         if [ $? -gt 0 ]
         then
-            cuckoo_os_error "Could not copy theme '${CUCKOO_OS_ETC_XFCE_THEME_DIR}${xfce_theme}'"
+            cuckoo_os_error "Could not copy theme '${CUCKOO_OS_ETC_XFCE4_THEME_DIR}${xfce4_theme}'"
         fi
     done
 
     # Xfce icons
-    for xfce_icon in $(ls "$CUCKOO_OS_ETC_XFCE_ICON_DIR")
+    for xfce4_icon in $(ls "$CUCKOO_OS_ETC_XFCE4_ICON_DIR")
     do
-        cp -r "${CUCKOO_OS_ETC_XFCE_ICON_DIR}${xfce_icon}" "${CUCKOO_OS_SYSTEM_ICONS_DIR}${CUCKOO_OS}-${xfce_icon}"
+        cp -r "${CUCKOO_OS_ETC_XFCE4_ICON_DIR}${xfce4_icon}" "${CUCKOO_OS_SYSTEM_ICONS_DIR}${CUCKOO_OS}-${xfce4_icon}"
         if [ $? -gt 0 ]
         then
-            cuckoo_os_error "Could not copy theme '${CUCKOO_OS_ETC_XFCE_ICON_DIR}${xfce_icon}'"
+            cuckoo_os_error "Could not copy theme '${CUCKOO_OS_ETC_XFCE4_ICON_DIR}${xfce4_icon}'"
         fi
     done
 
@@ -158,8 +158,8 @@ cuckoo_os_linux_install_system()
 # Install and set only for user
 cuckoo_os_linux_install_user()
 {
-    cuckoo_os_style_xfce_theme_install
-    cuckoo_os_style_xfce_theme_define
+    cuckoo_os_style_xfce4_theme_install
+    cuckoo_os_style_xfce4_theme_define
 }
 
 

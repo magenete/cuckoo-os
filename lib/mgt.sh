@@ -11,7 +11,6 @@
 
 CUCKOO_OS_DIR="${CUCKOO_OS_DIR:=$(cd "$(dirname "$0")/.." && pwd -P)}/"
 
-CUCKOO_OS="cuckoo-os"
 CUCKOO_OS_ACTION=""
 CUCKOO_OS_NAME=""
 CUCKOO_OS_STYLE=""
@@ -40,6 +39,8 @@ done
 if [ "$(whoami)" = "$USER" ] && [ "$(basename $HOME)" = "$USER" ]
 then
     cuckoo_os_env
+
+    cuckoo_os_variables
 
     cuckoo_os_args $@
 

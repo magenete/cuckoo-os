@@ -114,7 +114,7 @@ cuckoo_os_lightdm_gtk_greeter_files_create()
 
 
 [greeter]
-background=${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_DIR}background/${style}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.svg
+background=${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_BACKGROUND_DIR}${style}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.svg
 theme-name=${CUCKOO_OS_STYLE_THEME}
 icon-theme-name=${CUCKOO_OS_STYLE_THEME_ICON}
 font-name=Sans
