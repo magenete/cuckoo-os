@@ -87,7 +87,6 @@ cuckoo_os_style_xfce4_theme_install_system()
     then
         cuckoo_os_error "Could not copy from '$CUCKOO_OS_ETC_BACKGROUND_DIR' to '$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_DIR'"
     fi
-    chown -R root.root "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_DIR"
     chmod 0755 "$CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_DIR"*
 
     # XFce4 themes
