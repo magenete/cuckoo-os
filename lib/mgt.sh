@@ -46,10 +46,7 @@ then
 
     cuckoo_os_variables_check
 
-    if [ "$CUCKOO_OS_SUPERUSER_COMMAND" = "sudo" ]
-    then
-        $CUCKOO_OS_SUPERUSER_COMMAND sh -c "\"${CUCKOO_OS_BIN_DIR}${CUCKOO_OS}\" \"$(cuckoo_os_args_without_superuser "$@")\""
-    elif [ -z "$CUCKOO_OS_SUPERUSER_COMMAND" ]
+    if [ -z "$CUCKOO_OS_SUPERUSER_COMMAND" ]
     then
         [ "$CUCKOO_OS_ACTION" = "uninstall" ] && cuckoo_os_screen_size_uninstall_$CUCKOO_OS_STYLE_MODE
 
@@ -63,6 +60,9 @@ then
                 ;;
             esac
         fi
+    elif [ "$CUCKOO_OS_SUPERUSER_COMMAND" = "sudo" ]
+    then
+        $CUCKOO_OS_SUPERUSER_COMMAND sh -c "\"${CUCKOO_OS_BIN_DIR}${CUCKOO_OS}\" \"$(cuckoo_os_args_without_superuser "$@")\""
     else
         $CUCKOO_OS_SUPERUSER_COMMAND --command "\"${CUCKOO_OS_BIN_DIR}${CUCKOO_OS}\" \"$(cuckoo_os_args_without_superuser "$@")\""
     fi

@@ -8,7 +8,42 @@
 #
 
 
-#
+# Select theme
+cuckoo_os_grub_theme_select_system()
+{
+    export GRUB_BACKGROUND="${CUCKOO_OS_SYSTEM_GRUB_THEME_CUCKOO_OS_BACKGROUND_DIR}${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.png"
+    export GRUB_THEME="${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}${CUCKOO_OS}/$(cuckoo_os_grub_theme_file_name_define)"
+    export GRUB_GFXMODE="${CUCKOO_OS_SYSTEM_GRUB_SCREEN_SIZE}x24"
+#    export GRUB_GFXPAYLOAD_LINUX="keep"
+
+    # Update
+    grub-mkconfig -o "$CUCKOO_OS_SYSTEM_GRUB_CONFIG_FILE"
+}
+
+
+# Uninstall theme for system
+cuckoo_os_grub_theme_uninstall_system()
+{
+    if [ -d "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR" ]
+    then
+        rm -rf "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}${CUCKOO_OS}"*
+        [ -z "$(ls "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR")" ] && rm -rf "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR"
+    fi
+
+    # Update
+    grub-mkconfig -o "$CUCKOO_OS_SYSTEM_GRUB_CONFIG_FILE"
+}
+
+
+# Install and set only for system
+cuckoo_os_grub_theme_install_system()
+{
+    cuckoo_os_grub_theme_dir_create
+    cuckoo_os_grub_theme_files_create
+}
+
+
+# Define theme name file
 cuckoo_os_grub_theme_file_name_define()
 {
     local cuckoo_os_style="$1"
@@ -22,7 +57,7 @@ cuckoo_os_grub_theme_file_name_define()
 }
 
 
-#
+# Generate and create all theme files
 cuckoo_os_grub_theme_files_create()
 {
     for style in $CUCKOO_OS_STYLE_LIST
@@ -152,13 +187,10 @@ _G_R_U_B__T_H_E_M_E__F_I_L_E
 }
 
 
-#
+# Create directory theme
 cuckoo_os_grub_theme_dir_create()
 {
-    if [ ! -d "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR" ]
-    then
-        mkdir "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR"
-    fi
+    mkdir -p "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR"
 
     cp -r "$CUCKOO_OS_ETC_GRUB_DIR" "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}${CUCKOO_OS}"
 }

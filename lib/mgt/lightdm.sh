@@ -8,6 +8,51 @@
 #
 
 
+# Select theme
+cuckoo_os_lightdm_theme_select_system()
+{
+    ln -sf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_CUCKOO_OS_GREETER_DIR}${CUCKOO_OS_STYLE}.conf" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
+}
+
+
+# Uninstall for system
+cuckoo_os_lightdm_theme_uninstall_system()
+{
+    # Files
+    if [ -e "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" ] && [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" ]
+    then
+        mv -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
+    fi
+
+    if [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT_BACKUP" ]
+    then
+        if [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ]
+        then
+            rm -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT_BACKUP"
+        else
+            mv "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE_DEFAULT_BACKUP" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
+        fi
+    fi
+
+    # Directories
+    rm -rf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_DIR}${CUCKOO_OS}"
+    [ -L "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE" ] && rm -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"
+
+    rm -rf "$CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CUCKOO_OS_DIR"
+    rm -f "${CUCKOO_OS_SYSTEM_USR_SHARE_LIGHTDM_CONF_DIR}${CUCKOO_OS}"*
+}
+
+
+# Install and set only for system
+cuckoo_os_lightdm_theme_install_system()
+{
+    cuckoo_os_lightdm_conf_dir_create
+    cuckoo_os_lightdm_conf_file_create
+    cuckoo_os_lightdm_gtk_greeter_files_create
+    cuckoo_os_lightdm_gtk_greeter_file_select
+}
+
+
 # Create lightdm.conf.d for Cuckoo
 cuckoo_os_lightdm_conf_dir_create()
 {
