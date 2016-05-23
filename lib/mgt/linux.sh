@@ -55,6 +55,22 @@ cuckoo_os_linux_uninstall_user()
     cuckoo_os_style_xfce4_theme_uninstall
 
     rm -rf "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_DIR"
+
+    # XFce4 themes
+    rm -f "${CUCKOO_OS_SYSTEM_USER_XFCE4_THEMES_DIR}${CUCKOO_OS}"*
+
+    if [ -z "$(ls "$CUCKOO_OS_SYSTEM_USER_XFCE4_THEMES_DIR")" ]
+    then
+        rm -rf "$CUCKOO_OS_SYSTEM_USER_XFCE4_THEMES_DIR"
+    fi
+
+    # XFce4 icons
+    rm -f "${CUCKOO_OS_SYSTEM_USER_XFCE4_ICONS_DIR}${CUCKOO_OS}"*
+
+    if [ -z "$(ls "$CUCKOO_OS_SYSTEM_USER_XFCE4_ICONS_DIR")" ]
+    then
+        rm -rf "$CUCKOO_OS_SYSTEM_USER_XFCE4_ICONS_DIR"
+    fi
 }
 
 
@@ -157,6 +173,22 @@ cuckoo_os_linux_install_system()
 cuckoo_os_linux_install_user()
 {
     mkdir -p "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_DIR"
+
+    # XFce4 themes
+    mkdir -p "$CUCKOO_OS_SYSTEM_USER_XFCE4_THEMES_DIR"
+
+    for xfce4_theme in $(ls "$CUCKOO_OS_ETC_XFCE4_THEME_DIR")
+    do
+        ln -s "${CUCKOO_OS_ETC_XFCE4_THEME_DIR}${xfce4_theme}" "${CUCKOO_OS_SYSTEM_THEMES_DIR}${CUCKOO_OS}-${xfce4_theme}"
+    done
+
+    # Xfce4 icons
+    mkdir -p "$CUCKOO_OS_SYSTEM_USER_XFCE4_ICONS_DIR"
+
+    for xfce4_icon in $(ls "$CUCKOO_OS_ETC_XFCE4_ICON_DIR")
+    do
+        ln -s "${CUCKOO_OS_ETC_XFCE4_ICON_DIR}${xfce4_icon}" "${CUCKOO_OS_SYSTEM_ICONS_DIR}${CUCKOO_OS}-${xfce4_icon}"
+    done
 
     cuckoo_os_style_xfce4_theme_install
     cuckoo_os_style_xfce4_theme_define

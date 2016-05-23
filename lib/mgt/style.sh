@@ -8,7 +8,7 @@
 #
 
 
-# Define Cuckoo theme by style
+# Define theme by style
 cuckoo_os_style_theme_define()
 {
     local cuckoo_os_style="$1"
@@ -32,30 +32,55 @@ cuckoo_os_style_theme_define()
 }
 
 
-# Install Cuckoo theme by style
+# Install XFce4 theme by style
 cuckoo_os_style_xfce4_theme_install()
 {
-    if [ -f "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DESKTOP_XML_FILE" ] && [ ! -f "${CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DESKTOP_XML_FILE}.backup" ]
+    if [ -f "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DESKTOP_XML_FILE" ] && [ ! -f "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DESKTOP_XML_DEFAULT_FILE" ]
     then
-        cp "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DESKTOP_XML_FILE" "${CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DESKTOP_XML_FILE}.backup"
+        cp "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DESKTOP_XML_FILE" "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DESKTOP_XML_DEFAULT_FILE"
     fi
 
-    if [ -f "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_XSETTINGS_XML_FILE" ] && [ ! -f "${CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_XSETTINGS_XML_FILE}.backup" ]
+    if [ -f "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_XSETTINGS_XML_FILE" ] && [ ! -f "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_XSETTINGS_XML_DEFAULT_FILE" ]
     then
-        cp "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_XSETTINGS_XML_FILE" "${CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_XSETTINGS_XML_FILE}.backup"
-    fi
-
-    if [ -f "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DISPLAYS_XML_FILE" ] && [ ! -f "${CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DISPLAYS_XML_FILE}.backup" ]
-    then
-        cp "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DISPLAYS_XML_FILE" "${CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DISPLAYS_XML_FILE}.backup"
+        cp "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_XSETTINGS_XML_FILE" "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_XSETTINGS_XML_DEFAULT_FILE"
     fi
 }
 
 
-# Define Cuckoo theme by style
+# Define XFce4 theme by style
 cuckoo_os_style_xfce4_theme_define()
 {
-    local cuckoo_os_background_file="${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_BACKGROUND_DIR}${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.png"
+    local cuckoo_os_background_file="${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.png"
+    local cuckoo_os_themes_dir="$CUCKOO_OS_STYLE_THEME"
+    local cuckoo_os_icons_dir="$CUCKOO_OS_STYLE_THEME_ICON"
+
+    if [ "$CUCKOO_OS_STYLE_MODE" = "$CUCKOO_OS_STYLE_MODE_DEFAULT" ]
+    then
+        if [ -f "${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_BACKGROUND_DIR}${cuckoo_os_background_file}" ]
+        then
+            cuckoo_os_background_file="${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_BACKGROUND_DIR}${cuckoo_os_background_file}"
+        else
+            cuckoo_os_background_file="${CUCKOO_OS_ETC_BACKGROUND_DIR}${cuckoo_os_background_file}"
+        fi
+
+        if [ -d "${CUCKOO_OS_SYSTEM_THEMES_DIR}${cuckoo_os_themes_dir}" ]
+        then
+            cuckoo_os_themes_dir="${CUCKOO_OS_SYSTEM_THEMES_DIR}${cuckoo_os_themes_dir}"
+        else
+            cuckoo_os_themes_dir="${CUCKOO_OS_SYSTEM_USER_XFCE4_THEMES_DIR}${cuckoo_os_themes_dir}"
+        fi
+
+        if [ -d "${CUCKOO_OS_SYSTEM_ICONS_DIR}${cuckoo_os_icons_dir}" ]
+        then
+            cuckoo_os_icons_dir="${CUCKOO_OS_SYSTEM_ICONS_DIR}${cuckoo_os_icons_dir}"
+        else
+            cuckoo_os_icons_dir="${CUCKOO_OS_SYSTEM_USER_XFCE4_ICONS_DIR}${cuckoo_os_icons_dir}"
+        fi
+    else
+        cuckoo_os_background_file="${CUCKOO_OS_SYSTEM_IMAGES_CUCKOO_OS_BACKGROUND_DIR}${cuckoo_os_background_file}"
+        cuckoo_os_themes_dir="${CUCKOO_OS_SYSTEM_THEMES_DIR}${cuckoo_os_themes_dir}"
+        cuckoo_os_icons_dir="${CUCKOO_OS_SYSTEM_ICONS_DIR}${cuckoo_os_icons_dir}"
+    fi
 
     cuckoo_os_style_theme_define
 
@@ -65,11 +90,11 @@ cuckoo_os_style_xfce4_theme_define()
     xfconf-query -c "xsettings" -p "/Xfce/LastCustomDPI" -n -t "int" -s "$CUCKOO_OS_STYLE_THEME_FONT_DPI"
     xfconf-query -c "xsettings" -p "/Xft/DPI" -n -t "int" -s "$CUCKOO_OS_STYLE_THEME_FONT_DPI"
 
-    if [ -d "${CUCKOO_OS_SYSTEM_THEMES_DIR}${CUCKOO_OS_STYLE_THEME}" ]
+    if [ -e "$cuckoo_os_themes_dir" ]
     then
         xfconf-query -c "xsettings" -p "/Net/ThemeName" -t "string" -s "$CUCKOO_OS_STYLE_THEME"
     fi
-    if [ -d "${CUCKOO_OS_SYSTEM_ICONS_DIR}${CUCKOO_OS_STYLE_THEME_ICON}" ]
+    if [ -e "$cuckoo_os_icons_dir" ]
     then
         xfconf-query -c "xsettings" -p "/Net/IconThemeName" -t "string" -s "$CUCKOO_OS_STYLE_THEME_ICON"
         xfconf-query -c "xsettings" -p "/Gtk/CursorThemeName" -t "string" -s "$CUCKOO_OS_STYLE_THEME_CURSOR"
@@ -84,22 +109,17 @@ cuckoo_os_style_xfce4_theme_define()
 }
 
 
-# Uninstall Cuckoo theme by style
+# Uninstall XFce4 theme by style
 cuckoo_os_style_xfce4_theme_uninstall()
 {
-    if [ -f "${CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DESKTOP_XML_FILE}.backup" ]
+    if [ -f "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DESKTOP_XML_DEFAULT_FILE" ]
     then
-        mv -f "${CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DESKTOP_XML_FILE}.backup" "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DESKTOP_XML_FILE"
+        mv -f "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DESKTOP_XML_DEFAULT_FILE" "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DESKTOP_XML_FILE"
     fi
 
-    if [ -f "${CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_XSETTINGS_XML_FILE}.backup" ]
+    if [ -f "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_XSETTINGS_XML_DEFAULT_FILE" ]
     then
-        mv -f "${CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_XSETTINGS_XML_FILE}.backup" "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_XSETTINGS_XML_FILE"
-    fi
-
-    if [ -f "${CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DISPLAYS_XML_FILE}.backup" ]
-    then
-        mv -f "${CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DISPLAYS_XML_FILE}.backup" "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_DISPLAYS_XML_FILE"
+        mv -f "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_XSETTINGS_XML_DEFAULT_FILE" "$CUCKOO_OS_SYSTEM_USER_XFCE4_CONF_XSETTINGS_XML_FILE"
     fi
 
     xfconf-query -c "xfce4-desktop" -p "/backdrop/screen0/monitor0" -R -r
