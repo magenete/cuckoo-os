@@ -179,7 +179,7 @@ cuckoo_os_linux_install_user()
 
     for xfce4_theme in $(ls "$CUCKOO_OS_ETC_XFCE4_THEME_DIR")
     do
-        ln -s "${CUCKOO_OS_ETC_XFCE4_THEME_DIR}${xfce4_theme}" "${CUCKOO_OS_SYSTEM_THEMES_DIR}${CUCKOO_OS}-${xfce4_theme}"
+        ln -s "${CUCKOO_OS_ETC_XFCE4_THEME_DIR}${xfce4_theme}" "${CUCKOO_OS_SYSTEM_USER_XFCE4_THEMES_DIR}${CUCKOO_OS}-${xfce4_theme}"
     done
 
     # Xfce4 icons
@@ -187,7 +187,7 @@ cuckoo_os_linux_install_user()
 
     for xfce4_icon in $(ls "$CUCKOO_OS_ETC_XFCE4_ICON_DIR")
     do
-        ln -s "${CUCKOO_OS_ETC_XFCE4_ICON_DIR}${xfce4_icon}" "${CUCKOO_OS_SYSTEM_ICONS_DIR}${CUCKOO_OS}-${xfce4_icon}"
+        ln -s "${CUCKOO_OS_ETC_XFCE4_ICON_DIR}${xfce4_icon}" "${CUCKOO_OS_SYSTEM_USER_XFCE4_ICONS_DIR}${CUCKOO_OS}-${xfce4_icon}"
     done
 
     cuckoo_os_style_xfce4_theme_install
