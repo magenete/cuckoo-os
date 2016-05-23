@@ -53,17 +53,19 @@ cuckoo_os_linux_uninstall_system()
 cuckoo_os_linux_uninstall_user()
 {
     cuckoo_os_style_xfce4_theme_uninstall
+
+    rm -rf "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_DIR"
 }
 
 
-#  Uninstall Cuckoo on Linux in all
+# Uninstall Cuckoo on Linux in all
 cuckoo_os_linux_uninstall()
 {
     cuckoo_os_linux_uninstall_$CUCKOO_OS_STYLE_MODE
 }
 
 
-#
+# Update GRUB and LightDM
 cuckoo_os_linux_select_system()
 {
     if [ ! -z "$CUCKOO_OS_STYLE" ]
@@ -82,14 +84,14 @@ cuckoo_os_linux_select_system()
 }
 
 
-#
+# Update user settings
 cuckoo_os_linux_select_user()
 {
     cuckoo_os_linux_install_user
 }
 
 
-# Select
+# Update settings
 cuckoo_os_linux_select()
 {
     cuckoo_os_linux_select_$CUCKOO_OS_STYLE_MODE
@@ -154,6 +156,8 @@ cuckoo_os_linux_install_system()
 # Install and set only for user
 cuckoo_os_linux_install_user()
 {
+    mkdir -p "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_DIR"
+
     cuckoo_os_style_xfce4_theme_install
     cuckoo_os_style_xfce4_theme_define
 }

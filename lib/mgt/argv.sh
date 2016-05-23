@@ -49,10 +49,8 @@ cuckoo_os_args()
                 cuckoo_os_error "Invalid value '${2}' for screen size"
             else
                 CUCKOO_OS_SYSTEM_SCREEN_SIZE="$2"
-
-                cuckoo_os_screen_size_define
-                exit $?
             fi
+            shift 2
         ;;
         --version | -V )
             echo "Cuckoo OS version: $(cat "$CUCKOO_OS_ETC_VERSION_FILE")"
