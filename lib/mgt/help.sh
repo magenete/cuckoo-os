@@ -22,7 +22,7 @@ Cuckoo OS theme style install/uninstall script.
     -i, --install      Install Cuckoo OS (by default).
     -u, --uninstall    Uninstall Cuckoo OS.
     -e, --select       Select style and mode.
-    -D, --screen-size  Define screen size (min: ${CUCKOO_OS_SYSTEM_SCREEN_SIZE_X_MIN}x${CUCKOO_OS_SYSTEM_SCREEN_SIZE_Y_MIN}, max: ${CUCKOO_OS_SYSTEM_SCREEN_SIZE_X_MAX}x${CUCKOO_OS_SYSTEM_SCREEN_SIZE_Y_MAX}).
+    -D, --screen-size  Define screen size (current: $(cuckoo_os_screen_size_current), min: ${CUCKOO_OS_SYSTEM_SCREEN_SIZE_X_MIN}x${CUCKOO_OS_SYSTEM_SCREEN_SIZE_Y_MIN}, max: ${CUCKOO_OS_SYSTEM_SCREEN_SIZE_X_MAX}x${CUCKOO_OS_SYSTEM_SCREEN_SIZE_Y_MAX}).
                          OS screen sizes: $(from_arr_to_str "$(cuckoo_os_screen_size_list)").
 
     -V, --version      Print the current version.

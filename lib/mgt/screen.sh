@@ -8,6 +8,27 @@
 #
 
 
+# Current screen size
+cuckoo_os_screen_size_current()
+{
+    xrandr -q 2> /dev/null | {
+        while IFS= read -r line
+        do
+            [ "${line# }" = "$line" ] && continue
+
+            line="$(echo $line)"
+
+            if [ "$line" != "${line%%\**}" ]
+            then
+                echo "${line%%\ *}"
+
+                break
+            fi
+        done
+    }
+}
+
+
 # Define OS screen size list
 cuckoo_os_screen_size_list()
 {
@@ -141,9 +162,18 @@ cuckoo_os_screen_size_value_check()
 }
 
 
-# Unnstall screen size for user
+# Uninstall screen size for user
 cuckoo_os_screen_size_uninstall_user()
 {
+    if [ -f "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_SCREEN_SIZE_DEFAULT_FILE" ]
+    then
+        CUCKOO_OS_SYSTEM_SCREEN_SIZE="$(cat "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_SCREEN_SIZE_DEFAULT_FILE" 2> /dev/null)"
+
+        [ ! -z "$CUCKOO_OS_SYSTEM_SCREEN_SIZE" ] && cuckoo_os_screen_size_define
+
+        rm -f "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_SCREEN_SIZE_DEFAULT_FILE"
+    fi
+
     if [ -f "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_SCREEN_SIZE_FILE" ]
     then
         rm -f "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_SCREEN_SIZE_FILE"
@@ -153,12 +183,26 @@ cuckoo_os_screen_size_uninstall_user()
     then
         rm -rf "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_DIR"
     fi
+
+    if [ -f "$CUCKOO_OS_SYSTEM_USER_AUTOSTART_CUCKOO_OS_SCREEN_SIZE_FILE" ]
+    then
+        rm -f "$CUCKOO_OS_SYSTEM_USER_AUTOSTART_CUCKOO_OS_SCREEN_SIZE_FILE"
+    fi
 }
 
 
-# Unnstall screen size for system
+# Uninstall screen size for system
 cuckoo_os_screen_size_uninstall_system()
 {
+    if [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_CUCKOO_OS_SCREEN_SIZE_DEFAULT_FILE" ]
+    then
+        CUCKOO_OS_SYSTEM_SCREEN_SIZE="$(cat "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_CUCKOO_OS_SCREEN_SIZE_DEFAULT_FILE" 2> /dev/null)"
+
+        [ ! -z "$CUCKOO_OS_SYSTEM_SCREEN_SIZE" ] && cuckoo_os_screen_size_define
+
+        rm -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_CUCKOO_OS_SCREEN_SIZE_DEFAULT_FILE"
+    fi
+
     if [ -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_CUCKOO_OS_SCREEN_SIZE_FILE" ]
     then
         rm -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_CUCKOO_OS_SCREEN_SIZE_FILE"
