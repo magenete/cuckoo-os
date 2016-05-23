@@ -84,9 +84,9 @@ cuckoo_os_style_xfce4_theme_define()
 
     cuckoo_os_style_theme_define
 
-    xfconf-query -c "xsettings" -p "/Xft/Antialias" -t "int" -s "1"
-    xfconf-query -c "xsettings" -p "/Xft/HintStyle" -t "string" -s "$CUCKOO_OS_STYLE_THEME_FONT_HINT"
-    xfconf-query -c "xsettings" -p "/Xft/RGBA" -t "string" -s "$CUCKOO_OS_STYLE_THEME_FONT_RGBA"
+    xfconf-query -c "xsettings" -p "/Xft/Antialias" -n -t "int" -s "1"
+    xfconf-query -c "xsettings" -p "/Xft/HintStyle" -n -t "string" -s "$CUCKOO_OS_STYLE_THEME_FONT_HINT"
+    xfconf-query -c "xsettings" -p "/Xft/RGBA" -n -t "string" -s "$CUCKOO_OS_STYLE_THEME_FONT_RGBA"
     xfconf-query -c "xsettings" -p "/Xfce/LastCustomDPI" -n -t "int" -s "$CUCKOO_OS_STYLE_THEME_FONT_DPI"
     xfconf-query -c "xsettings" -p "/Xft/DPI" -n -t "int" -s "$CUCKOO_OS_STYLE_THEME_FONT_DPI"
 
@@ -102,9 +102,9 @@ cuckoo_os_style_xfce4_theme_define()
 
     if [ -f "$cuckoo_os_background_file" ]
     then
-        xfconf-query -c "xfce4-desktop" -p "/backdrop/screen0/monitor0/image-show" -t "bool" -s "true"
-        xfconf-query -c "xfce4-desktop" -p "/backdrop/screen0/monitor0/image-style" -t "int" -s "5"
-        xfconf-query -c "xfce4-desktop" -p "/backdrop/screen0/monitor0/image-path" -t "string" -s "$cuckoo_os_background_file"
+        xfconf-query -c "xfce4-desktop" -p "/backdrop/screen0/monitor0/image-show" -n -t "bool" -s "true"
+        xfconf-query -c "xfce4-desktop" -p "/backdrop/screen0/monitor0/image-style" -n -t "int" -s "5"
+        xfconf-query -c "xfce4-desktop" -p "/backdrop/screen0/monitor0/image-path" -n -t "string" -s "$cuckoo_os_background_file"
     fi
 }
 
