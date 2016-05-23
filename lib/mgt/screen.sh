@@ -213,9 +213,15 @@ cuckoo_os_screen_size_uninstall_system()
 # Install screen size for user
 cuckoo_os_screen_size_install_user()
 {
+    mkdir -p "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_DIR"
+
+    if [ ! -f "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_SCREEN_SIZE_DEFAULT_FILE" ]
+    then
+        printf "$(cuckoo_os_screen_size_current)" > "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_SCREEN_SIZE_DEFAULT_FILE"
+    fi
+
     cuckoo_os_screen_size_define
 
-    mkdir -p "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_DIR"
     printf "$CUCKOO_OS_SYSTEM_SCREEN_SIZE" > "$CUCKOO_OS_SYSTEM_USER_CUCKOO_OS_SCREEN_SIZE_FILE"
 
     mkdir -p "$CUCKOO_OS_SYSTEM_USER_AUTOSTART_DIR"
@@ -231,8 +237,14 @@ _S_C_R_E_E_N__S_I_Z_E__U_S_E_R
 # Install screen size for system
 cuckoo_os_screen_size_install_system()
 {
+    mkdir -p "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_CUCKOO_OS_DIR"
+
+    if [ ! -f "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_CUCKOO_OS_SCREEN_SIZE_DEFAULT_FILE" ]
+    then
+        printf "$(cuckoo_os_screen_size_current)" > "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_CUCKOO_OS_SCREEN_SIZE_DEFAULT_FILE"
+    fi
+
     cuckoo_os_screen_size_define
 
-    mkdir -p "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_CUCKOO_OS_DIR"
     printf "$CUCKOO_OS_SYSTEM_SCREEN_SIZE" > "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_CUCKOO_OS_SCREEN_SIZE_FILE"
 }
