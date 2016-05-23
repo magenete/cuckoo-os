@@ -40,8 +40,6 @@ cuckoo_os_grub_theme_install_system()
 {
     cuckoo_os_grub_theme_dir_create
     cuckoo_os_grub_theme_files_create
-
-    chmod 0755 "$CUCKOO_OS_SYSTEM_GRUB_THEME_CUCKOO_OS_BACKGROUND_DIR"
 }
 
 
@@ -195,4 +193,6 @@ cuckoo_os_grub_theme_dir_create()
     mkdir -p "$CUCKOO_OS_SYSTEM_GRUB_THEME_DIR"
 
     cp -r "$CUCKOO_OS_ETC_GRUB_DIR" "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}${CUCKOO_OS}"
+
+    chmod 0755 "${CUCKOO_OS_SYSTEM_GRUB_THEME_DIR}${CUCKOO_OS}"
 }
