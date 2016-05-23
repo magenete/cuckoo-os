@@ -51,15 +51,9 @@ then
         $CUCKOO_OS_SUPERUSER_COMMAND sh -c "\"${CUCKOO_OS_BIN_DIR}${CUCKOO_OS}\" \"$(cuckoo_os_args_without_superuser "$@")\""
     elif [ -z "$CUCKOO_OS_SUPERUSER_COMMAND" ]
     then
-        if [ ! -z "$CUCKOO_OS_SYSTEM_SCREEN_SIZE" ] && [ "$CUCKOO_OS_ACTION" = "uninstall" ]
-        then
-            cuckoo_os_screen_size_uninstall_$CUCKOO_OS_STYLE_MODE
-        fi
+        [ "$CUCKOO_OS_ACTION" = "uninstall" ] && cuckoo_os_screen_size_uninstall_$CUCKOO_OS_STYLE_MODE
 
-        if [ "$CUCKOO_OS_ACTION" != "screen-size" ]
-        then
-            cuckoo_os_${CUCKOO_OS_NAME}_${CUCKOO_OS_ACTION}
-        fi
+        [ "$CUCKOO_OS_ACTION" != "screen-size" ] && cuckoo_os_${CUCKOO_OS_NAME}_${CUCKOO_OS_ACTION}
 
         if [ ! -z "$CUCKOO_OS_SYSTEM_SCREEN_SIZE" ]
         then
