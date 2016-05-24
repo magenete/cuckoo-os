@@ -8,7 +8,7 @@
 #
 
 
-# Select theme
+# Select theme for system
 cuckoo_os_lightdm_theme_select_system()
 {
     ln -sf "${CUCKOO_OS_SYSTEM_ETC_LIGHTDM_CUCKOO_OS_GREETER_DIR}${CUCKOO_OS_STYLE}.conf" "$CUCKOO_OS_SYSTEM_ETC_LIGHTDM_FILE"

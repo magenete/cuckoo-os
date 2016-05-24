@@ -8,7 +8,7 @@
 #
 
 
-# Select theme
+# Select theme for system
 cuckoo_os_grub_theme_select_system()
 {
     export GRUB_BACKGROUND="${CUCKOO_OS_SYSTEM_GRUB_THEME_CUCKOO_OS_BACKGROUND_DIR}${CUCKOO_OS_STYLE}/${CUCKOO_OS_NAME}${CUCKOO_OS_NAME_DIST}.png"
